@@ -56,8 +56,39 @@ a:hover { opacity: 0.8; }
   font-size: 1.2rem; font-weight: 600; color: var(--white);
   margin-top: 36px; margin-bottom: 12px;
 }
+.content h3 {
+  font-size: 1.05rem; font-weight: 600; color: var(--cyan);
+  margin-top: 20px; margin-bottom: 8px;
+}
 .content p { margin-bottom: 14px; color: var(--text); }
 .content strong { color: var(--white); }
+.content ul { margin: 0 0 14px 24px; }
+.content li { margin-bottom: 6px; }
+
+.scope-table {
+  width: 100%; border-collapse: collapse; margin: 16px 0 20px;
+  font-size: 0.9rem;
+}
+.scope-table th {
+  text-align: left; padding: 10px 12px;
+  background: var(--bg-card); color: var(--cyan);
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+.scope-table td {
+  padding: 10px 12px; border-bottom: 1px solid rgba(26,45,74,0.4);
+  color: var(--text);
+}
+.scope-table tr:last-child td { border-bottom: none; }
+
+.callout {
+  background: rgba(0,229,255,0.04);
+  border: 1px solid rgba(0,229,255,0.15);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin: 20px 0;
+  font-size: 0.95rem;
+}
 
 .footer {
   padding: 40px 24px; text-align: center;
@@ -70,6 +101,8 @@ a:hover { opacity: 0.8; }
 
 @media (max-width: 600px) {
   .content h1 { font-size: 1.6rem; }
+  .scope-table { font-size: 0.8rem; }
+  .scope-table th, .scope-table td { padding: 8px; }
 }
 </style>
 </head>
@@ -84,46 +117,139 @@ a:hover { opacity: 0.8; }
 
 <div class="content">
   <h1>Privacy Policy</h1>
-  <p class="updated">Effective Date: March 27, 2026 &middot; Last Updated: March 27, 2026</p>
+  <p class="updated">Effective Date: April 3, 2026 &middot; Last Updated: April 3, 2026</p>
 
   <h2>1. Introduction</h2>
-  <p>WatchLocal.ai ("we," "us," or "our") operates watchlocal.ai and related services. This Privacy Policy explains what information we collect, how we use it, and your choices regarding your data. We are committed to transparency and minimal data collection.</p>
+  <p>WatchLocal.ai ("WatchLocal," "we," "us," or "our") is an AI-powered local visibility management platform. We help small businesses get found everywhere their customers look â across search engines, directories, review sites, social platforms, and AI-powered search tools.</p>
+  <p>To do this, we ask our clients to connect their business accounts on platforms like Google, Meta, and others so our AI agents can manage and optimize their online presence on their behalf. This Privacy Policy explains exactly what data we collect, how we use it, how we protect it, and your rights as a client.</p>
+  <p>We believe in radical transparency. If you have questions about anything in this document, contact us at <a href="mailto:david@watchlocal.ai">david@watchlocal.ai</a>.</p>
 
   <h2>2. Information We Collect</h2>
-  <p><strong>Business Information:</strong> When you sign up for our service, we collect your business name, address, phone number, website URL, and business category. This information is necessary to perform visibility scans and generate reports.</p>
-  <p><strong>Contact Information:</strong> We collect your name, email address, and phone number to communicate with you about your account and deliver reports.</p>
-  <p><strong>Scan Data:</strong> We collect publicly available information about your business from search engines, directories, review sites, and other online platforms. This data is already public — we organize and present it to you in a useful format.</p>
-  <p><strong>Basic Analytics:</strong> We collect basic website usage data (pages visited, time on site) to improve our service. We do not use invasive tracking or third-party advertising trackers.</p>
+
+  <h3>2a. Business Information You Provide</h3>
+  <p>When you onboard through our Intake process, we collect your business name, address, phone number, website URL, and primary business contact name and email. This information is necessary to set up your accounts, manage your listings, and deliver our services.</p>
+
+  <h3>2b. Platform Access Credentials</h3>
+  <p>When you connect your accounts through our Access Connect feature, we receive OAuth access tokens and refresh tokens from the platforms you authorize. <strong>We never see or store your passwords.</strong> All authentication is handled through each platform's official OAuth 2.0 protocol. These tokens allow our AI agents to manage your business profiles on your behalf.</p>
+  <p>Tokens are encrypted at rest and stored on secure cloud infrastructure (Netlify Blobs with encrypted storage). Access is restricted to our automated service agents and authorized personnel only.</p>
+
+  <h3>2c. Platform Authorization Details</h3>
+  <p>We are transparent about exactly what access we request on each platform:</p>
+
+  <table class="scope-table">
+    <tr><th>Platform</th><th>Access Requested</th><th>What It Allows Us To Do</th></tr>
+    <tr><td>Google Business Profile</td><td>business.manage</td><td>Manage your business listing, posts, photos, Q&A, and reviews</td></tr>
+    <tr><td>Google Analytics</td><td>analytics.edit</td><td>View your website traffic data and configure basic tracking</td></tr>
+    <tr><td>Google Tag Manager</td><td>tagmanager.manage.users</td><td>Set up conversion tracking tags for your website</td></tr>
+    <tr><td>Google Search Console</td><td>Guided verification</td><td>Monitor your search performance and indexing status</td></tr>
+    <tr><td>Meta (Facebook / Instagram)</td><td>pages_manage_posts, pages_read_engagement, instagram_basic, instagram_content_publish</td><td>Manage your business page posts, view engagement metrics, and post content</td></tr>
+    <tr><td>CMS (Website)</td><td>Guided access setup</td><td>Optimize on-page SEO elements, schema markup, and site structure</td></tr>
+    <tr><td>Nextdoor</td><td>Guided claim</td><td>Claim and manage your Nextdoor business page</td></tr>
+  </table>
+
+  <p>You can revoke WatchLocal's access to any platform at any time through that platform's security settings (for example, <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener">Google Account Permissions</a> or <a href="https://www.facebook.com/settings/?tab=business_tools" target="_blank" rel="noopener">Facebook Business Integrations</a>).</p>
+
+  <h3>2d. Photos and Media</h3>
+  <p>You may upload business photos, videos, and other media through our Photo/Video Drop feature. These are used exclusively to enhance your business profiles across your connected platforms. You retain full ownership of all media you provide.</p>
+
+  <h3>2e. Scan and Audit Data</h3>
+  <p>We collect publicly available information about your business from search engines, AI search tools, directories, review sites, and other online platforms. This data is already public â we organize, score, and present it to help you understand and improve your visibility.</p>
+
+  <h3>2f. Usage Data</h3>
+  <p>We collect basic website usage data (pages visited, time on site, device type) to improve our service. We do not use invasive tracking, advertising cookies, or third-party analytics services that follow you across the web.</p>
 
   <h2>3. How We Use Your Information</h2>
-  <p><strong>Service Delivery:</strong> To scan platforms for your business presence, generate visibility scores, produce audit reports, and deliver monthly monitoring reports.</p>
-  <p><strong>Communication:</strong> To send you your reports, notify you of visibility changes, and respond to your questions.</p>
-  <p><strong>Service Improvement:</strong> To improve our scanning accuracy, scoring algorithms, and platform coverage.</p>
 
-  <h2>4. What We Do NOT Do</h2>
-  <p>We want to be explicit about what we will never do with your data:</p>
-  <p>We do not sell your personal or business information to anyone. We do not share your data with advertisers. We do not send unsolicited marketing emails. We do not share your business data with your competitors. We do not use your data to train AI models for third parties.</p>
+  <p>We use the information we collect to deliver the 70 actions across 10 visibility pillars that form our service. Specifically:</p>
 
-  <h2>5. Data Storage and Security</h2>
-  <p>Your data is stored on secure cloud infrastructure. We use encryption in transit (HTTPS) and at rest. Access is restricted to authorized personnel only. While we implement reasonable security measures, no system is 100% secure. We will notify affected users promptly in the event of a data breach.</p>
+  <p><strong>Active Profile Management:</strong> Our AI agents use your connected account access to create, update, and optimize your business profiles across platforms â including posting content, uploading photos, responding to reviews, updating business information, and managing your local SEO.</p>
 
-  <h2>6. Cookies and Tracking</h2>
-  <p>We use minimal cookies necessary for site functionality. We do not use advertising cookies, social media tracking pixels, or third-party analytics services that track you across the web.</p>
+  <p><strong>Visibility Monitoring:</strong> We continuously scan 80+ online platforms to track your business presence, generate visibility scores, produce audit reports, and deliver ongoing monitoring.</p>
 
-  <h2>7. Third-Party Services</h2>
-  <p>We use third-party services to operate our platform, including cloud hosting, email delivery, and payment processing. These providers process data on our behalf under their respective privacy policies. We do not share more data with them than necessary to provide our service.</p>
+  <p><strong>Content Creation:</strong> We use your business information and media to generate posts, descriptions, and content for your profiles. All AI-generated content is reviewed before publication.</p>
 
-  <h2>8. Your Rights</h2>
-  <p>You have the right to access, correct, or delete your personal data at any time. You can request a copy of all data we hold about you. You can cancel your account and request deletion of your data. To exercise any of these rights, contact us at david@watchlocal.ai. We will respond within 30 days.</p>
+  <p><strong>Communication:</strong> We send you reports, updates on visibility changes, and notifications about actions taken on your behalf.</p>
 
-  <h2>9. Children's Privacy</h2>
-  <p>WatchLocal.ai is a business service not intended for users under the age of 18. We do not knowingly collect personal information from minors.</p>
+  <p><strong>Service Improvement:</strong> We use aggregated, anonymized data to improve our scanning accuracy, AI models, and platform coverage. Your individual business data is never used to train third-party AI models.</p>
 
-  <h2>10. Changes to This Policy</h2>
-  <p>We may update this Privacy Policy from time to time. We will notify users of material changes by email or through the platform. Your continued use of WatchLocal.ai after changes are posted constitutes acceptance of the updated policy.</p>
+  <h2>4. AI and Automation</h2>
 
-  <h2>11. Contact Us</h2>
-  <p>If you have questions about this Privacy Policy or our data practices, contact us at:</p>
+  <div class="callout">
+    <strong>Our AI Commitment:</strong> WatchLocal uses AI agents to manage your local business presence. We believe you should know exactly how AI is involved in managing your business.
+  </div>
+
+  <p>WatchLocal employs AI-powered agents that perform actions on your behalf across your connected platforms. These agents operate under human oversight â our team reviews and approves actions before they are published. Key points about our AI usage:</p>
+
+  <p><strong>What our AI agents do:</strong> Generate business descriptions, create social media posts, optimize listing details, analyze review sentiment, identify visibility gaps, and recommend improvements.</p>
+
+  <p><strong>Human review:</strong> All content generated by AI is subject to review before it is published to your platforms. Automated posting only occurs for categories of content that have been pre-approved.</p>
+
+  <p><strong>Accuracy:</strong> While we strive for accuracy, AI-generated content may occasionally contain errors. We encourage you to review all content posted to your profiles and notify us of any inaccuracies.</p>
+
+  <p><strong>Third-party AI providers:</strong> We may use third-party AI services (such as OpenAI and Google Cloud AI) to power certain features. When we do, only the minimum necessary data is shared with these providers, and it is processed under strict data processing agreements. Your business data is not used to train these providers' general-purpose models.</p>
+
+  <h2>5. What We Do NOT Do</h2>
+  <p>We believe in being explicit about our boundaries:</p>
+  <ul>
+    <li>We <strong>do not sell</strong> your personal or business information to anyone, ever.</li>
+    <li>We <strong>do not share</strong> your data with advertisers.</li>
+    <li>We <strong>do not access</strong> your Gmail, Google Drive, personal social media, or any services beyond what is listed in the authorization table above.</li>
+    <li>We <strong>do not store</strong> your passwords. All authentication uses OAuth tokens.</li>
+    <li>We <strong>do not share</strong> your business data with your competitors.</li>
+    <li>We <strong>do not use</strong> your individual data to train AI models for third parties.</li>
+    <li>We <strong>do not send</strong> unsolicited marketing emails.</li>
+  </ul>
+
+  <h2>6. Data Sharing</h2>
+  <p>We share your information only in these limited circumstances:</p>
+  <p><strong>Connected Platforms:</strong> When you authorize a platform through Access Connect, we share your business information with that platform to manage your listings. This is the core of our service â we post, update, and optimize on your behalf.</p>
+  <p><strong>Service Providers:</strong> We use trusted infrastructure providers to operate our platform, including Netlify (hosting and serverless functions), Cloudflare (network security and DNS), and Supabase (database). These providers process data on our behalf under their respective data processing agreements and are prohibited from using your data for their own purposes.</p>
+  <p><strong>AI Service Providers:</strong> As noted in Section 4, we may use third-party AI services for content generation and analysis. Only the minimum data required is shared, under strict contractual protections.</p>
+  <p><strong>Legal Requirements:</strong> We may disclose information when required by law, legal process, or government request, or to protect the rights, safety, or property of WatchLocal, our clients, or the public.</p>
+
+  <h2>7. Data Storage and Security</h2>
+  <p>Your data is stored on secure cloud infrastructure with the following protections:</p>
+  <ul>
+    <li>All connections use HTTPS encryption in transit.</li>
+    <li>OAuth tokens are encrypted at rest in secure cloud storage.</li>
+    <li>Access to client data is restricted to authorized automated agents and personnel.</li>
+    <li>We conduct regular security reviews of our infrastructure and access controls.</li>
+  </ul>
+  <p>While we implement industry-standard security measures, no system is 100% secure. In the event of a data breach affecting your information, we will notify you within 72 hours of becoming aware of the breach, along with details of what occurred and steps we are taking to address it.</p>
+
+  <h2>8. Data Retention and Deletion</h2>
+  <p>We retain your business data and access tokens for as long as your account is active and we are providing services to you. Upon termination of service:</p>
+  <ul>
+    <li>We revoke all platform access tokens within 7 days.</li>
+    <li>We retain basic account information for 30 days in case you wish to reactivate.</li>
+    <li>After 30 days, or upon your request, we delete all your data from our systems.</li>
+    <li>Aggregated, anonymized data that cannot identify your business may be retained indefinitely for service improvement.</li>
+  </ul>
+  <p>To request immediate deletion of all your data, contact us at <a href="mailto:david@watchlocal.ai">david@watchlocal.ai</a>.</p>
+
+  <h2>9. Cookies and Tracking</h2>
+  <p>We use minimal cookies necessary for site functionality (such as session management and authentication state). We do not use advertising cookies, social media tracking pixels, cross-site analytics, or any third-party trackers that follow you across the web.</p>
+
+  <h2>10. Your Rights</h2>
+  <p>Regardless of where you are located, you have the right to:</p>
+  <ul>
+    <li><strong>Access</strong> all data we hold about your business.</li>
+    <li><strong>Correct</strong> any inaccurate information.</li>
+    <li><strong>Delete</strong> your data and close your account.</li>
+    <li><strong>Revoke</strong> platform access at any time through each platform's settings.</li>
+    <li><strong>Export</strong> a copy of your data in a standard format.</li>
+    <li><strong>Object</strong> to specific types of data processing.</li>
+  </ul>
+  <p>To exercise any of these rights, contact us at <a href="mailto:david@watchlocal.ai">david@watchlocal.ai</a>. We will respond within 30 days.</p>
+
+  <h2>11. Children's Privacy</h2>
+  <p>WatchLocal.ai is a business service not intended for individuals under 18 years of age. We do not knowingly collect personal information from minors.</p>
+
+  <h2>12. Changes to This Policy</h2>
+  <p>We may update this Privacy Policy as our services evolve. We will notify clients of material changes by email at least 14 days before they take effect. The "Last Updated" date at the top of this page reflects the most recent revision. Your continued use of WatchLocal.ai after changes are posted constitutes acceptance of the updated policy.</p>
+
+  <h2>13. Contact Us</h2>
+  <p>If you have questions about this Privacy Policy, our data practices, or your rights, contact us at:</p>
   <p><strong>Email:</strong> <a href="mailto:david@watchlocal.ai">david@watchlocal.ai</a><br>
   <strong>Organization:</strong> WatchLocal.ai<br>
   <strong>Location:</strong> Celina, Texas</p>
