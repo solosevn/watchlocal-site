@@ -589,6 +589,21 @@ a:hover { opacity: 0.8; }
   <a href="https://watchlocal.netlify.app/see" class="hero-cta">See How It Works</a>
 </section>
 
+<!-- WatchLocal agent-activity widget - live platform counts (cross-origin fed from watchlocal.netlify.app) -->
+<section style="padding: 60px 20px; background: rgba(255,255,255,0.02);">
+  <div id="wl-activity-widget" style="max-width: 820px; margin: 0 auto;"></div>
+</section>
+<script src="https://watchlocal.netlify.app/widgets/agent-activity/widget.js" defer></script>
+<script>
+  window.addEventListener('DOMContentLoaded', function () {
+    if (window.WLActivityWidget && typeof window.WLActivityWidget.mount === 'function') {
+      window.WLActivityWidget.mount('#wl-activity-widget', {
+        feedUrl: 'https://watchlocal.netlify.app/.netlify/functions/agent-activity'
+      });
+    }
+  });
+</script>
+
 <!-- FOOTER -->
 <footer class="footer">
   <div class="footer-links">
