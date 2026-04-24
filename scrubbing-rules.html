@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scrubbing Rules | WatchLocal.ai</title>
+<meta name="description" content="The written policy WatchLocal follows when publishing the public agent-activity feed. What we publish, what we strip, and how we protect client data at every scale.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060d1a;
+  --bg-card: #0c1829;
+  --border: #1a2d4a;
+  --cyan: #00e5ff;
+  --text: #e2e8f0;
+  --text-dim: #8892a4;
+  --white: #ffffff;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.8;
+}
+h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; line-height: 1.3; }
+a { color: var(--cyan); text-decoration: none; }
+a:hover { opacity: 0.8; }
+
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(6,13,26,0.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(26,45,74,0.5); padding: 0 24px;
+}
+.nav-inner {
+  max-width: 960px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; height: 60px;
+}
+.nav-logo { font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--white); }
+.nav-logo span { color: var(--cyan); }
+.nav-back { font-size: 0.85rem; color: var(--text-dim); }
+.nav-back:hover { color: var(--cyan); }
+
+.content {
+  max-width: 760px; margin: 0 auto;
+  padding: 100px 24px 60px;
+}
+.content h1 {
+  font-size: 2.2rem; font-weight: 700; color: var(--white); margin-bottom: 8px;
+}
+.content .updated {
+  font-size: 0.85rem; color: var(--text-dim); margin-bottom: 32px;
+}
+.content .lede {
+  font-size: 1.05rem; color: var(--text); margin-bottom: 32px;
+  padding: 20px 22px; background: var(--bg-card);
+  border-left: 3px solid var(--cyan); border-radius: 8px;
+}
+.content h2 {
+  font-size: 1.3rem; font-weight: 600; color: var(--white);
+  margin-top: 44px; margin-bottom: 14px;
+}
+.content h3 {
+  font-size: 1.05rem; font-weight: 600; color: var(--cyan);
+  margin-top: 24px; margin-bottom: 10px;
+}
+.content p { margin-bottom: 14px; color: var(--text); }
+.content strong { color: var(--white); }
+.content ul, .content ol { margin: 0 0 14px 24px; }
+.content li { margin-bottom: 8px; }
+.content code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85em;
+  background: rgba(0,229,255,0.06);
+  border: 1px solid rgba(0,229,255,0.12);
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: var(--cyan);
+}
+
+.scope-table {
+  width: 100%; border-collapse: collapse; margin: 16px 0 20px;
+  font-size: 0.9rem;
+}
+.scope-table th {
+  text-align: left; padding: 10px 12px;
+  background: var(--bg-card); color: var(--cyan);
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+.scope-table td {
+  padding: 10px 12px; border-bottom: 1px solid rgba(26,45,74,0.4);
+  color: var(--text); vertical-align: top;
+}
+.scope-table tr:last-child td { border-bottom: none; }
+.scope-table code { font-size: 0.82em; }
+
+.callout {
+  background: rgba(0,229,255,0.04);
+  border: 1px solid rgba(0,229,255,0.15);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin: 20px 0;
+  font-size: 0.95rem;
+}
+
+.example {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin: 14px 0;
+  font-size: 0.9rem;
+}
+.example-title {
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--white); font-weight: 600;
+  margin-bottom: 10px; font-size: 0.98rem;
+}
+.example-row {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: var(--text-dim);
+  word-break: break-all;
+  margin-bottom: 6px;
+}
+.example-row .label {
+  color: var(--cyan); font-family: 'Inter', sans-serif; font-weight: 600;
+  margin-right: 6px;
+}
+.example-row.scrubbed {
+  color: var(--text);
+}
+
+.codeblock {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 12px 0 18px;
+  color: var(--text);
+  overflow-x: auto;
+  line-height: 1.6;
+  white-space: pre;
+}
+
+.footer {
+  padding: 40px 24px; text-align: center;
+  border-top: 1px solid var(--border);
+}
+.footer-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 16px; flex-wrap: wrap; }
+.footer-links a { font-size: 0.85rem; color: var(--text-dim); }
+.footer-links a:hover { color: var(--cyan); }
+.footer-copy { font-size: 0.8rem; color: #546e7a; }
+
+@media (max-width: 600px) {
+  .content h1 { font-size: 1.6rem; }
+  .scope-table { font-size: 0.8rem; }
+  .scope-table th, .scope-table td { padding: 8px; }
+  .example-row { font-size: 0.72rem; }
+  .codeblock { font-size: 0.74rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Watch<span>Local</span>.ai</a>
+    <a href="index.html" class="nav-back">&larr; Back</a>
+  </div>
+</nav>
+
+<div class="content">
+  <h1>Scrubbing Rules</h1>
+  <p class="updated">How we scrub the public activity feed &middot; Version 2.1 &middot; Effective April 22, 2026</p>
+
+  <div class="lede">
+    This is the written policy WatchLocal follows when publishing the agent-activity feed that appears at the bottom of our homepage. It exists so any client or prospect can verify &mdash; with receipts &mdash; what we publish, what we strip, and why we believe the feed prove our system works <strong>without identifying any single client</strong>.
+  </div>
+
+  <h2>The 10,000-client forcing function</h2>
+  <p><strong>This policy is designed to be correct on the day WatchLocal crosses 10,000 paying clients. Not the day we cross 3. Not the day we cross 50. The day we cross 10,000.</strong></p>
+  <p>That constraint shapes every decision below. An earlier draft of this policy hardcoded a 51-entry trade list, a 25-entry action list, and a <code>below_threshold: true</code> flag that was meant to flip off later. All three would have become maintenance treadmills &mdash; at 10,000 clients we'd be amending the trade list monthly, the action list weekly, and either shipping threshold-flag code into production or scrambling to disable it. <strong>We do the work once, at the scale we intend to operate at.</strong></p>
+  <p>The current design has three properties that survive 10,000 clients:</p>
+  <ol>
+    <li><strong>Closed axes are shaped by the work, not by the world.</strong> The 8 work-type categories don't grow &mdash; they describe what marketing work <em>is</em>. <code>Surface</code> (platform) and <code>trade</code> (client industry) are open strings because the world supplies those and we don't get to decide when a new platform launches a feature or when a new client signs up as "pool &amp; spa service."</li>
+    <li><strong>The client owns their own label.</strong> Trade names live in the client's own brand profile. When a new client joins as "pool &amp; spa service," no edit to this policy is required. No schema change. The client owns it.</li>
+    <li><strong>K-anonymity is continuous, not thresholded.</strong> No row appears in the feed unless at least <em>k</em> distinct clients contribute to that <code>(category, surface, trade, city)</code> bucket <em>right now, in the live window</em>. There is no flag to flip off. When the cohort grows, more rows appear. When it shrinks, rows disappear. The rule is the same at N=3 and at N=10,000.</li>
+  </ol>
+  <p>If a future amendment adds any field that re-introduces a curated list, a threshold flag, or a client-specific carve-out, that amendment fails the discipline check and should be rejected.</p>
+
+  <h2>1. Purpose</h2>
+  <p>Define exactly which fields from raw agent logs may appear in the public agent-activity feed, which must be stripped, and which must be generalized. This is also the written policy WatchLocal points at when a client or prospect asks <em>"how do you protect my business's data when you publish agent activity?"</em></p>
+  <p><strong>Operating principle:</strong> the feed must prove the machine works <strong>without identifying any single client</strong>. If a reader can combine what we publish with any public data source to deanonymize a specific business, we have failed.</p>
+
+  <h2>2. Scope</h2>
+  <p><strong>In scope:</strong> every record in the public JSON feed served from our infrastructure. The feed has two independent blocks: the per-client <code>tasks</code> array (governed by sections 3&ndash;10) and the platform <code>by_category</code> counts (governed by section 9).</p>
+  <p><strong>Out of scope:</strong> internal agent logs, internal dashboards, client-facing monthly visibility reports. Those can contain client names and details &mdash; they are not public.</p>
+  <p><strong>Never in feed:</strong> any record whose source is a <strong>prospecting</strong> action (outreach SMS or email to non-clients). The feed only surfaces actions taken <strong>on behalf of paying clients</strong>. Prospecting activity is a different category and belongs elsewhere, or nowhere public.</p>
+
+  <h2>3. The five published fields &mdash; and nothing else</h2>
+  <p>Every row in the public feed has exactly these five fields. The aggregator produces rows that look like this and only like this.</p>
+
+  <table class="scope-table">
+    <tr><th>Field</th><th>Type</th><th>Example</th></tr>
+    <tr><td><code>category</code></td><td>closed enum (8 values &mdash; see section 4)</td><td><code>listing_optimization</code></td></tr>
+    <tr><td><code>surface</code></td><td>free string, &le; 80 chars</td><td><code>Google Business Profile</code></td></tr>
+    <tr><td><code>trade</code></td><td>free string, &le; 60 chars</td><td><code>HVAC contractor</code></td></tr>
+    <tr><td><code>city_state</code></td><td>free string, &le; 60 chars (format: <code>City, ST</code>)</td><td><code>Celina, TX</code></td></tr>
+    <tr><td><code>ts</code></td><td>ISO-8601 UTC, hour-rounded</td><td><code>2026-04-22T14:00:00Z</code></td></tr>
+  </table>
+
+  <p>Plus two top-level metadata fields in the feed envelope (not per-row): <code>generated_at</code> (hour-rounded) and total/by-category counts.</p>
+  <p>Anything not listed above is stripped. The aggregator does not pass through an <code>agent</code> field, a <code>business</code> field, a <code>phone</code> field, or any free-text body. If a field isn't in this table, it doesn't appear.</p>
+
+  <h2>4. The 8 per-client categories (closed enum)</h2>
+  <p>This is the one hardcoded axis in the per-client feed. It describes the kinds of work the agents do. It's closed because the shape of SEO and local-marketing work is closed &mdash; new platforms come and go, new client trades come and go, but the fundamental operations fall into these eight buckets.</p>
+
+  <div class="codeblock">citation_building       &mdash; creating / updating NAP listings on directories
+review_management       &mdash; requesting, routing, and logging customer reviews
+listing_optimization    &mdash; updating GBP / Bing / Apple / Yelp listing fields (hours, services, photos, service areas)
+content_publishing      &mdash; posting updates / photos / offers to listing or social surfaces
+schema_markup           &mdash; adding or updating structured data on the client's site
+technical_seo           &mdash; sitemap, redirects, canonicalization, page speed, indexing
+reputation_response     &mdash; responding to reviews, Q&amp;A, and community threads
+seasonal_content        &mdash; seasonal campaigns, holiday hours, weather-driven service posts</div>
+
+  <p>If a raw action doesn't fit any of the 8 categories, the record is dropped and logged to the violations log (section 10). We do not invent a 9th category on the fly. Amendments to this list require written approval, a policy version bump, and a discipline check &mdash; and are reviewed skeptically, because the whole point of 8 is that the list doesn't grow.</p>
+
+  <h2>5. <code>surface</code> and <code>trade</code> &mdash; free strings, client-owned</h2>
+
+  <h3>5a. <code>surface</code></h3>
+  <p>The platform or channel on which the work was performed. Examples the aggregator emits today: <code>Google Business Profile</code>, <code>Yelp</code>, <code>Nextdoor</code>, <code>Facebook Business</code>, <code>Instagram</code>, <code>Bing Places</code>, <code>Apple Maps</code>, <code>BBB</code>, <code>Angi</code>, <code>HomeAdvisor</code>, <code>Thumbtack</code>, <code>client website</code>, <code>client sitemap</code>, <code>schema.org</code>.</p>
+  <p>No enum. When a platform ships a new feature and we start using it, the string just appears in the feed. When a new supported platform goes live, no schema change is needed. The aggregator enforces a maximum length of 80 characters as a sanity cap &mdash; beyond that, it's almost certainly a copy-paste of a description and gets dropped to violations.</p>
+
+  <h3>5b. <code>trade</code></h3>
+  <p>The client's industry label, <strong>as the client wants it displayed</strong>. The client owns this value. It lives in the client's brand profile:</p>
+  <div class="codeblock">{
+  "slug": "acme-hvac-celina",
+  "display_trade": "HVAC contractor",
+  ...
+}</div>
+  <p>When a client is onboarded, <code>display_trade</code> is set once. The aggregator reads it and emits it verbatim. If the client later says "show us as 'heating &amp; cooling' instead," they edit their brand profile &mdash; no code change, no policy amendment, no coordination with shared infrastructure.</p>
+  <p>Sanity caps: maximum length 60 characters. If the string is empty or malformed, the record is dropped to violations.</p>
+
+  <h3>5c. Why free strings work at 10,000 clients</h3>
+  <p>A single closed enum for trades is a maintenance treadmill that breaks under load: every new client onboarded in a category we haven't seen before would require a policy edit, a schema edit, and a deploy. Free strings plus client-owned labels move the responsibility to where it belongs (the client) and remove the central bottleneck.</p>
+  <p>The risk of free strings is that a client could type something revealing (<code>"Joe's One-Truck Plumbing"</code> instead of <code>"Plumber"</code>). Three controls mitigate this:</p>
+  <ol>
+    <li><code>display_trade</code> is labeled on the onboarding form: <em>"Industry or trade only. Do NOT include your business name, your city, or your phone number."</em></li>
+    <li>The aggregator runs a regex check before emitting: reject any <code>trade</code> value containing digits, <code>@</code>, <code>http</code>, or more than 3 consecutive capitalized words &mdash; all proxies for "this is a business name, not a trade."</li>
+    <li>The continuous k-anonymity rule (section 6) guarantees no row appears unless at least <em>k</em> distinct clients share the exact <code>(category, surface, trade, city)</code> bucket. A one-off bad label can't leak through because it won't cluster.</li>
+  </ol>
+
+  <h2>6. Continuous k-anonymity</h2>
+  <p><strong>Rule:</strong> before emitting any row, the aggregator groups the last 30 days of scrubbed activity records by the tuple <code>(category, surface, trade, city_state)</code>. Only buckets with <strong>at least k = 3 distinct client slugs</strong> contributing are emitted. The aggregator publishes the latest timestamped record from each qualifying bucket.</p>
+  <p><strong>Generalization is not automatic.</strong> Earlier drafts quietly bumped <code>Pediatric dentist</code> to <code>Dentist</code> to force a match. The current design does not &mdash; if a bucket doesn't meet k, the row is simply not published. Generalization is the client's own choice via <code>display_trade</code> (a solo pediatric-dentist client can set <code>display_trade</code> to <code>"Dentist"</code> if they want broader coverage; that's their call, not the aggregator's).</p>
+  <p><strong>The k parameter.</strong> k = 3 at launch. If an analysis at N=500 or N=5,000 clients shows k=3 is too loose (specific buckets deanonymize under re-identification attacks), we raise k globally. We do not add per-category carve-outs.</p>
+  <p><strong>City widening is NOT performed by the aggregator.</strong> Earlier drafts had a fallback that dropped <code>city</code> and published <code>state</code>-only rows. This was removed. If <code>(category, surface, trade, city_state)</code> doesn't meet k, nothing is emitted for that bucket. State-level aggregation would create deanonymization risk when combined with external data (e.g., only Texas HVAC contractor doing schema markup = one client). Simpler and safer: don't publish unless the full tuple meets k.</p>
+
+  <h2>7. Timestamp handling</h2>
+  <ul>
+    <li>Round to the hour: <code>2026-04-22T14:23:07Z</code> becomes <code>2026-04-22T14:00:00Z</code>. Drop minutes and seconds before the record enters the feed.</li>
+    <li>Do not expose more than 30 rolling days of history in the public feed, even if older data exists internally.</li>
+    <li><code>generated_at</code> at the feed envelope level is also hour-rounded.</li>
+    <li>Exact second and minute timestamps are a re-identification surface (cross-referenced with a client's own social-post timestamps); the hour-round breaks that.</li>
+  </ul>
+
+  <h2>8. Twelve concrete before/after examples</h2>
+  <p>Raw = what lives in internal logs. Scrubbed = what the aggregator emits into the public JSON feed (assuming k-anonymity passes; the row is dropped entirely if it doesn't).</p>
+
+  <div class="example">
+    <div class="example-title">1. <code>citation_building</code> &mdash; NAP listing created for a plumber</div>
+    <div class="example-row"><span class="label">Raw:</span> {"business":"Celina Plumbers","phone":"(972) 555-1234","action":"Yelp citation created","ts":"2026-04-22T09:15:42Z"}</div>
+    <div class="example-row"><span class="label">display_trade:</span> "Plumber"</div>
+    <div class="example-row scrubbed"><span class="label">Scrubbed:</span> {"category":"citation_building","surface":"Yelp","trade":"Plumber","city_state":"Celina, TX","ts":"2026-04-22T09:00:00Z"}</div>
+  </div>
+
+  <div class="example">
+    <div class="example-title">2. <code>review_management</code> &mdash; review request SMS to an existing customer (not prospecting)</div>
+    <div class="example-row"><span class="label">Raw:</span> {"business":"Mike's HVAC of Celina","action":"review request SMS sent","recipient":"+19725551234","customer_status":"active_client","ts":"2026-04-22T14:23:07Z"}</div>
+    <div class="example-row"><span class="label">display_trade:</span> "HVAC contractor"</div>
+    <div class="example-row scrubbed"><span class="label">Scrubbed:</span> {"category":"review_management","surface":"SMS","trade":"HVAC contractor","city_state":"Celina, TX","ts":"2026-04-22T14:00:00Z"}</div>
+  </div>
+
+  <div class="example">
+    <div class="example-title">3. <code>listing_optimization</code> &mdash; GBP service-area update</div>
+    <div class="example-row"><span class="label">Raw:</span> {"business":"A+ Garage Door of Prosper","action":"GBP service area updated","platform":"Google Business Profile","ts":"2026-04-22T08:00:00Z"}</div>
+    <div class="example-row"><span class="label">display_trade:</span> "Garage door specialist"</div>
+    <div class="example-row scrubbed"><span class="label">Scrubbed:</span> {"category":"listing_optimization","surface":"Google Business Profile","trade":"Garage door specialist","city_state":"Prosper, TX","ts":"2026-04-22T08:00:00Z"}</div>
+  </div>
+
+  <div class="example">
+    <div class="example-title">4. <code>content_publishing</code> &mdash; Nextdoor post with free-text body stripped</div>
+    <div class="example-row"><span class="label">Raw:</span> {"business":"Little Elm Pediatric Dentistry","action":"Nextdoor post published","post_body":"Dr. Kim reminds parents of back-to-school fluoride checkups!","ts":"2026-04-22T19:00:00Z"}</div>
+    <div class="example-row"><span class="label">display_trade:</span> "Pediatric dentist" &mdash; if only 1&ndash;2 pediatric-dentist clients in Little Elm, k-anonymity fails and the row is dropped entirely, not generalized</div>
+    <div class="example-row scrubbed"><span class="label">Scrubbed (if k &ge; 3):</span> {"category":"content_publishing","surface":"Nextdoor","trade":"Pediatric dentist","city_state":"Little Elm, TX","ts":"2026-04-22T19:00:00Z"} &mdash; post_body stripped</div>
+  </div>
+
+  <div class="example">
+    <div class="example-title">5. <code>schema_markup</code> &mdash; LocalBusiness markup added to client site</div>
+    <div class="example-row"><span class="label">Raw:</span> {"business":"John Smith Roofing LLC","contact_email":"john@smithroofing.com","action":"schema.org LocalBusiness markup added","ts":"2026-04-22T16:47:11Z"}</div>
+    <div class="example-row"><span class="label">display_trade:</span> "Roofer"</div>
+    <div class="example-row scrubbed"><span class="label">Scrubbed:</span> {"category":"schema_markup","surface":"client website","trade":"Roofer","city_state":"Frisco, TX","ts":"2026-04-22T16:00:00Z"} &mdash; owner name and email stripped</div>
+  </div>
+
+  <div class="example">
+    <div class="example-title">6. <code>technical_seo</code> &mdash; sitemap refresh</div>
+    <div class="example-row"><span class="label">Raw:</span> {"business":"Wylie Wellness Chiropractic","action":"sitemap.xml regenerated","pages_added":12,"ts":"2026-04-22T15:20:00Z"}</div>
+    <div class="example-row"><span class="label">display_trade:</span> "Chiropractor"</div>
+    <div class="example-row scrubbed"><span class="label">Scrubbed:</span> {"category":"technical_seo","surface":"client sitemap","trade":"Chiropractor","city_state":"Wylie, TX","ts":"2026-04-22T15:00:00Z"} &mdash; pages_added dropped (not a published field)</div>
+  </div>
+
+  <div class="example">
+    <div class="example-title">7. <code>reputation_response</code> &mdash; GBP review response (bodies stripped)</div>
+    <div class="example-row"><span class="label">Raw:</span> {"business":"Frisco Dental Group","action":"GBP review response sent","review_text":"Dr. Johnson was great with my daughter","response_text":"Thanks Susan &mdash; we loved having Emma!","ts":"2026-04-22T11:30:00Z"}</div>
+    <div class="example-row"><span class="label">display_trade:</span> "Dentist"</div>
+    <div class="example-row scrubbed"><span class="label">Scrubbed:</span> {"category":"reputation_response","surface":"Google Business Profile","trade":"Dentist","city_state":"Frisco, TX","ts":"2026-04-22T11:00:00Z"} &mdash; review_text and response_text both dropped</div>
+  </div>
+
+  <div class="example">
+    <div class="example-title">8. <code>seasonal_content</code> &mdash; weather-driven HVAC post</div>
+    <div class="example-row"><span class="label">Raw:</span> {"business":"McKinney Cooling &amp; Heating","action":"GBP post published","post_body":"Summer heatwave tune-up special","theme":"seasonal","ts":"2026-04-22T10:00:00Z"}</div>
+    <div class="example-row"><span class="label">display_trade:</span> "HVAC contractor"</div>
+    <div class="example-row scrubbed"><span class="label">Scrubbed:</span> {"category":"seasonal_content","surface":"Google Business Profile","trade":"HVAC contractor","city_state":"McKinney, TX","ts":"2026-04-22T10:00:00Z"} &mdash; post_body and theme dropped; category chosen over generic content_publishing because the raw theme field tagged it seasonal</div>
+  </div>
+
+  <div class="example">
+    <div class="example-title">9. Prospecting record &mdash; DROP (never in feed)</div>
+    <div class="example-row"><span class="label">Raw:</span> {"business":"Allen Auto Works","action":"outreach SMS sent","recipient_number":"(214) 555-9999","customer_status":"prospect","ts":"2026-04-22T17:44:00Z"}</div>
+    <div class="example-row scrubbed"><span class="label">Scrubbed:</span> record dropped &mdash; prospecting is out of scope per section 2; logged to violations with reason <code>out_of_scope_prospecting</code></div>
+  </div>
+
+  <div class="example">
+    <div class="example-title">10. <code>listing_optimization</code> &mdash; Apple Maps update where <code>display_trade</code> is unusual</div>
+    <div class="example-row"><span class="label">Raw:</span> {"business":"Diana's Custom Koi Pond Installations","action":"Apple Maps listing hours updated","ts":"2026-04-22T13:05:22Z"}</div>
+    <div class="example-row"><span class="label">display_trade:</span> "Pond &amp; water feature contractor" &mdash; client's choice, not aggregator-forced</div>
+    <div class="example-row scrubbed"><span class="label">Scrubbed (if k &ge; 3):</span> {"category":"listing_optimization","surface":"Apple Maps","trade":"Pond &amp; water feature contractor","city_state":"Plano, TX","ts":"2026-04-22T13:00:00Z"}</div>
+    <div class="example-row"><span class="label">More likely at low N:</span> row dropped because the bucket doesn't meet k=3. Not generalized. Client has the option to change <code>display_trade</code> to <code>"Landscape contractor"</code> to widen their cohort.</div>
+  </div>
+
+  <div class="example">
+    <div class="example-title">11. <code>schema_markup</code> &mdash; FAQ schema</div>
+    <div class="example-row"><span class="label">Raw:</span> {"business":"The Colony Physical Therapy","action":"FAQ schema added to /faqs","ts":"2026-04-22T18:00:00Z"}</div>
+    <div class="example-row"><span class="label">display_trade:</span> "Physical therapist"</div>
+    <div class="example-row scrubbed"><span class="label">Scrubbed:</span> {"category":"schema_markup","surface":"client website","trade":"Physical therapist","city_state":"The Colony, TX","ts":"2026-04-22T18:00:00Z"}</div>
+  </div>
+
+  <div class="example">
+    <div class="example-title">12. <code>review_management</code> &mdash; review request email batch</div>
+    <div class="example-row"><span class="label">Raw:</span> {"business":"Anna's Bakery Frisco","action":"review request email sent","recipients":14,"customer_status":"active_client","ts":"2026-04-22T07:30:00Z"}</div>
+    <div class="example-row"><span class="label">display_trade:</span> "Bakery"</div>
+    <div class="example-row scrubbed"><span class="label">Scrubbed:</span> {"category":"review_management","surface":"email","trade":"Bakery","city_state":"Frisco, TX","ts":"2026-04-22T07:00:00Z"} &mdash; recipients count dropped (not a published field)</div>
+  </div>
+
+  <h2>9. The platform activity block (counts only)</h2>
+  <div class="callout">
+    <strong>Why this block exists.</strong> Sections 3&ndash;8 above govern the per-client <code>tasks</code> array: individual marketing actions taken on behalf of paying clients, scrubbed to 5 fields, gated by continuous k-anonymity. That's correct at 10,000 clients and at 3 clients, but at 3 clients <em>zero rows qualify</em> &mdash; the per-client feed correctly shows empty. Meanwhile the system is still doing real work every day (audits, market research, technical scans, listing surveys) across the entire public web. Section 9 exists so that work can be published honestly, in a way that carries zero re-identification risk and therefore needs no anonymity math.
+  </div>
+
+  <h3>9a. Scope</h3>
+  <p><strong>In scope for the platform block:</strong> aggregate counts of work performed by our agents that is <strong>not tied to any specific paying client</strong> &mdash; public-web audits, market-ranking reports, directory surveys, technical-health scans, content scheduled for public distribution, platform-infrastructure and cost events.</p>
+  <p><strong>Out of scope for the platform block</strong> (same as section 2):</p>
+  <ul>
+    <li>Any outreach event to a specific recipient (SMS or email to a prospect). The individual send is out-of-scope; the aggregate <em>count</em> of outreach sends is also out-of-scope because that number signals commercial intent and is competitively sensitive.</li>
+    <li>Any per-business row, even without a name. If the shape of a row would allow cross-reference with public data to identify who was scraped or audited, it doesn't go in.</li>
+    <li>Anything that would require a per-client <code>display_trade</code> or <code>city_state</code> lookup to render &mdash; those belong in the per-client <code>tasks</code> array, not here.</li>
+  </ul>
+
+  <h3>9b. What gets published &mdash; counts only</h3>
+  <p>The <code>platform</code> block in the feed is a flat structure:</p>
+  <div class="codeblock">"platform": {
+  "total_30d": 467,
+  "by_category": {
+    "business_audits":     111,
+    "market_intelligence":  70,
+    "content_publishing":  105,
+    "technical_scans":      78,
+    "ranking_reports":      84,
+    "listing_scrapes":      19,
+    "ops_events":            0
+  }
+}</div>
+  <p>No timestamps per action, no surfaces, no cities, no trades, no business identifiers, no row array. <strong>This is the sufficient-and-necessary condition for no re-identification risk.</strong> A bare integer carries no identification signal regardless of scale.</p>
+
+  <h3>9c. The 7 platform categories (closed enum)</h3>
+  <p>Parallel to the 8-value per-client enum but independent from it. Shaped by the work the fleet does at platform scale, not by trade or platform.</p>
+  <div class="codeblock">business_audits       &mdash; comprehensive multi-dimension audits across the public web
+market_intelligence   &mdash; market-ranking and gap analyses
+content_publishing    &mdash; social and listing posts scheduled or published
+technical_scans       &mdash; security and technical-health scans
+ranking_reports       &mdash; local-ranking reports
+listing_scrapes       &mdash; directory surveys to identify market opportunities (survey runs, NOT outreach events)
+ops_events            &mdash; platform ops and infrastructure cost events</div>
+  <p>A new category requires written approval, a policy version bump, and a discipline check. Same discipline as section 4: the shape does not grow with the world.</p>
+
+  <h3>9d. What sources feed these counts</h3>
+  <p>The aggregator counts records produced by our agents over the last rolling 30 days, broken down by category:</p>
+  <table class="scope-table">
+    <tr><th>Category</th><th>Source (abstract)</th></tr>
+    <tr><td><code>business_audits</code></td><td>Multi-dimension audit run outputs (one record per completed audit)</td></tr>
+    <tr><td><code>market_intelligence</code></td><td>Market-gap and competitive-ranking analyses (one record per completed analysis)</td></tr>
+    <tr><td><code>content_publishing</code></td><td>Scheduled and published post records (one record per post)</td></tr>
+    <tr><td><code>technical_scans</code></td><td>Security-alert and technical-health scan outputs (one record per scan run)</td></tr>
+    <tr><td><code>ranking_reports</code></td><td>Local-ranking report outputs (one record per report)</td></tr>
+    <tr><td><code>listing_scrapes</code></td><td>Directory-survey run outputs &mdash; survey <em>runs</em>, NOT any individual outreach SMS or email that may follow, which remain out of scope per section 2</td></tr>
+    <tr><td><code>ops_events</code></td><td>Platform operations and cost event records</td></tr>
+  </table>
+  <p>If a source category produces zero records in the window, its count is <code>0</code> and the feed reflects that honestly. No source list, no client list, and no thresholds are hardcoded &mdash; as coverage expands, counts grow automatically.</p>
+
+  <h3>9e. Discipline check</h3>
+  <p>The platform block does not introduce a curated list, a threshold flag, or a client-specific carve-out:</p>
+  <ul>
+    <li><strong>Closed enum</strong> of 7 platform categories: shaped by work types, same rationale as the 8-value per-client enum. Does not grow with scale.</li>
+    <li><strong>No threshold flag:</strong> there is no below-N fallback, no per-category toggle. If a source is empty, its count is 0 and the feed reflects that.</li>
+    <li><strong>No client carve-out:</strong> this section explicitly publishes nothing per-client. The only client-related block in the feed remains the <code>tasks</code> array, governed by sections 3&ndash;8 unchanged.</li>
+  </ul>
+
+  <h2>10. Violation handling</h2>
+  <p>The aggregator must <strong>never silently pass through</strong> anything that fails a rule above. On failure:</p>
+  <ol>
+    <li>Drop the record from the feed.</li>
+    <li>Write a line to an internal violations log containing the raw record plus the rule that was violated. Violation codes:
+      <ul>
+        <li><code>category_not_in_enum</code> &mdash; raw action didn't map to any of the 8 categories</li>
+        <li><code>surface_empty</code> or <code>surface_too_long</code></li>
+        <li><code>trade_empty</code>, <code>trade_too_long</code>, or <code>trade_regex_fail</code> (looks like a business name, not a trade)</li>
+        <li><code>city_state_missing</code> or <code>city_state_malformed</code></li>
+        <li><code>ts_unparseable</code></li>
+        <li><code>k_anonymity_fail</code> &mdash; bucket had fewer than k distinct clients (not an error, just a filter; logged at debug level, not violation level)</li>
+        <li><code>out_of_scope_prospecting</code> &mdash; record was a prospecting action</li>
+        <li><code>platform_out_of_scope</code> &mdash; source was not in the section-9d whitelist</li>
+        <li><code>platform_outreach_leak</code> &mdash; source appeared to be an outreach send (recipient phone, email, or SMS body present)</li>
+      </ul>
+    </li>
+    <li>Never auto-expand the category enums &mdash; a new category requires a human-approved amendment to this document.</li>
+  </ol>
+  <p>The violation log is reviewed at the end of each internal review cycle. If the non-debug violation rate exceeds 1% of records for two consecutive cycles, the aggregator auto-disables publishing and alerts the team.</p>
+
+  <h2>11. Amendment process</h2>
+  <p>Changes to this document require:</p>
+  <ul>
+    <li>Written founder approval (commit reviewed in a dedicated PR).</li>
+    <li>A change-log entry explaining the why.</li>
+    <li>A corresponding schema update if field names change.</li>
+    <li><strong>A discipline check</strong>: does the change introduce a curated list, a threshold flag, or a client-specific carve-out? If yes, the amendment is rejected by default. Strong cause required.</li>
+  </ul>
+  <p>The aggregator reads the current version of this document's policy constants at runtime via the feed's JSON schema, which is the enforceable artifact, and logs which schema version it was built against.</p>
+
+  <h2>12. What changed from the earlier draft</h2>
+
+  <table class="scope-table">
+    <tr><th>Concern</th><th>Earlier draft</th><th>Current (v2.1)</th></tr>
+    <tr><td>Work-type axis</td><td><code>action</code> &mdash; 25-entry closed enum</td><td><code>category</code> &mdash; 8-entry closed enum</td></tr>
+    <tr><td>Platform axis</td><td><code>platform</code> &mdash; implicit closed list</td><td><code>surface</code> &mdash; free string, &le; 80 chars</td></tr>
+    <tr><td>Industry axis</td><td><code>trade</code> &mdash; 51-entry closed enum maintained centrally</td><td><code>trade</code> &mdash; free string, &le; 60 chars, owned by client</td></tr>
+    <tr><td>Small-cohort handling</td><td>Below-threshold flag, expected to flip later</td><td>Continuous k-anonymity &mdash; row simply doesn't appear unless k&nbsp;&ge;&nbsp;3</td></tr>
+    <tr><td>Generalization</td><td>Aggregator auto-bumped <code>Pediatric dentist</code> to <code>Dentist</code></td><td>Client chooses their own <code>display_trade</code></td></tr>
+    <tr><td>City widening</td><td><code>Dentist, TX</code> fallback when <code>(trade, city)</code> cohort too small</td><td>Removed &mdash; state-only rows too re-identifiable</td></tr>
+    <tr><td>New client or platform</td><td>Policy amendment + schema amendment + deploy</td><td>No coordination &mdash; strings just appear</td></tr>
+    <tr><td>Agent identity in feed</td><td>Agent identifier published</td><td>Dropped &mdash; redundant with category, and reduces fingerprinting surface</td></tr>
+  </table>
+
+  <h2>Contact</h2>
+  <p>Questions about this policy, or want receipts for any specific claim? Email the founder at <a href="mailto:david@watchlocal.ai">david@watchlocal.ai</a>.</p>
+</div>
+
+<footer class="footer">
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#about">About</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="scrubbing-rules.html">Scrubbing Rules</a>
+    <a href="mailto:david@watchlocal.ai">Contact</a>
+  </div>
+  <div class="footer-copy">&copy; 2026 WatchLocal.ai. All rights reserved.</div>
+</footer>
+
+</body>
+</html>
