@@ -63,6 +63,7 @@ a:hover { opacity: 0.8; }
 .content p { margin-bottom: 14px; color: var(--text); }
 .content strong { color: var(--white); }
 .content ul { margin: 0 0 14px 24px; }
+.content ol { margin: 0 0 14px 24px; }
 .content li { margin-bottom: 6px; }
 
 .scope-table {
@@ -78,8 +79,17 @@ a:hover { opacity: 0.8; }
 .scope-table td {
   padding: 10px 12px; border-bottom: 1px solid rgba(26,45,74,0.4);
   color: var(--text);
+  vertical-align: top;
 }
 .scope-table tr:last-child td { border-bottom: none; }
+.scope-table code {
+  font-family: 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.82rem; color: var(--cyan);
+  background: rgba(0,229,255,0.06);
+  padding: 1px 6px; border-radius: 4px;
+  white-space: nowrap;
+}
+.scope-table .scopes-list { display: flex; flex-direction: column; gap: 4px; }
 
 .callout {
   background: rgba(0,229,255,0.04);
@@ -117,12 +127,12 @@ a:hover { opacity: 0.8; }
 
 <div class="content">
   <h1>Privacy Policy</h1>
-  <p class="updated">Effective Date: April 3, 2026 &middot; Last Updated: April 3, 2026</p>
+  <p class="updated">Effective Date: April 30, 2026 &middot; Last Updated: April 30, 2026</p>
 
   <h2>1. Introduction</h2>
-  <p>WatchLocal.ai ("WatchLocal," "we," "us," or "our") is an AI-powered local visibility management platform. We help small businesses get found everywhere their customers look â across search engines, directories, review sites, social platforms, and AI-powered search tools.</p>
+  <p>WatchLocal.ai ("WatchLocal," "we," "us," or "our") is an AI-powered local visibility management platform. We help small businesses get found everywhere their customers look &mdash; across search engines, directories, review sites, social platforms, and AI-powered search tools.</p>
   <p>To do this, we ask our clients to connect their business accounts on platforms like Google, Meta, and others so our AI agents can manage and optimize their online presence on their behalf. This Privacy Policy explains exactly what data we collect, how we use it, how we protect it, and your rights as a client.</p>
-  <p>We believe in radical transparency. If you have questions about anything in this document, contact us at <a href="mailto:david@watchlocal.ai">david@watchlocal.ai</a>.</p>
+  <p>We believe in radical transparency. If you have questions about anything in this document, contact us at <!--email_off--><a href="mailto:david@watchlocal.ai">david@watchlocal.ai</a><!--/email_off-->.</p>
 
   <h2>2. Information We Collect</h2>
 
@@ -134,18 +144,61 @@ a:hover { opacity: 0.8; }
   <p>Tokens are encrypted at rest and stored on secure cloud infrastructure (Netlify Blobs with encrypted storage). Access is restricted to our automated service agents and authorized personnel only.</p>
 
   <h3>2c. Platform Authorization Details</h3>
-  <p>We are transparent about exactly what access we request on each platform:</p>
+  <p>We are transparent about exactly what access we request on each platform. Each row below lists the specific OAuth scope or permission we request and the action it enables on your behalf.</p>
 
   <table class="scope-table">
     <tr><th>Platform</th><th>Access Requested</th><th>What It Allows Us To Do</th></tr>
-    <tr><td>Google Business Profile</td><td>business.manage</td><td>Manage your business listing, posts, photos, Q&A, and reviews</td></tr>
-    <tr><td>Google Analytics</td><td>analytics.edit</td><td>View your website traffic data and configure basic tracking</td></tr>
-    <tr><td>Google Tag Manager</td><td>tagmanager.manage.users</td><td>Set up conversion tracking tags for your website</td></tr>
+    <tr><td>Google Business Profile</td><td><code>business.manage</code></td><td>Manage your business listing, posts, photos, Q&amp;A, and reviews</td></tr>
+    <tr><td>Google Analytics</td><td><code>analytics.edit</code></td><td>View your website traffic data and configure basic tracking</td></tr>
+    <tr><td>Google Tag Manager</td><td><code>tagmanager.manage.users</code></td><td>Set up conversion tracking tags for your website</td></tr>
     <tr><td>Google Search Console</td><td>Guided verification</td><td>Monitor your search performance and indexing status</td></tr>
-    <tr><td>Meta (Facebook / Instagram)</td><td>pages_manage_posts, pages_read_engagement, instagram_basic, instagram_content_publish</td><td>Manage your business page posts, view engagement metrics, and post content</td></tr>
+    <tr>
+      <td>Meta &mdash; Facebook Pages</td>
+      <td>
+        <div class="scopes-list">
+          <code>pages_show_list</code>
+          <code>pages_manage_metadata</code>
+          <code>pages_manage_posts</code>
+          <code>pages_manage_engagement</code>
+          <code>pages_read_engagement</code>
+          <code>pages_read_user_content</code>
+          <code>pages_messaging</code>
+          <code>business_management</code>
+        </div>
+      </td>
+      <td>
+        <strong>pages_show_list</strong>: see the list of Facebook Pages you administer so you can pick which ones we manage.<br>
+        <strong>pages_manage_metadata</strong>: update your Page's About section, business hours, services, and contact details.<br>
+        <strong>pages_manage_posts</strong>: create, edit, and publish posts to your Facebook Page on your behalf.<br>
+        <strong>pages_manage_engagement</strong>: respond to comments and reactions on your Page posts (after your approval).<br>
+        <strong>pages_read_engagement</strong>: read Page-level engagement metrics such as reach, impressions, and post performance.<br>
+        <strong>pages_read_user_content</strong>: read reviews, recommendations, and visitor posts on your Page so we can draft owner responses for your approval.<br>
+        <strong>pages_messaging</strong>: read and send messages on your Page's Messenger conversations with customers, only on Page-connected business conversations.<br>
+        <strong>business_management</strong>: required dependency to access Pages and Instagram Business assets owned by your Meta Business Portfolio.
+      </td>
+    </tr>
+    <tr>
+      <td>Meta &mdash; Instagram Business</td>
+      <td>
+        <div class="scopes-list">
+          <code>instagram_basic</code>
+          <code>instagram_content_publish</code>
+          <code>instagram_manage_comments</code>
+          <code>instagram_manage_messages</code>
+        </div>
+      </td>
+      <td>
+        <strong>instagram_basic</strong>: read your Instagram Business profile basic info (username, profile picture, bio, follower count) and your media.<br>
+        <strong>instagram_content_publish</strong>: publish feed posts, reels, and stories to your Instagram Business account on your behalf.<br>
+        <strong>instagram_manage_comments</strong>: read and respond to comments on your Instagram Business posts (after your approval).<br>
+        <strong>instagram_manage_messages</strong>: read and respond to direct messages on your Instagram Business account, only on business conversations.
+      </td>
+    </tr>
     <tr><td>CMS (Website)</td><td>Guided access setup</td><td>Optimize on-page SEO elements, schema markup, and site structure</td></tr>
     <tr><td>Nextdoor</td><td>Guided claim</td><td>Claim and manage your Nextdoor business page</td></tr>
   </table>
+
+  <p><strong>Specific Meta data we access:</strong> When you authorize our Meta integration, we access the following data categories on the Facebook Pages and Instagram Business accounts you connect &mdash; and only those: Page profile and metadata (name, About, hours, services, contact info, category); Page posts and post performance metrics (reach, impressions, engagement); Page reviews, recommendations, and visitor posts; comments and reactions on your Page posts; messages in Page-connected Messenger conversations between your business and your customers; the list of Pages and ad-account business assets in your Meta Business Portfolio; Instagram Business profile basic information; Instagram Business media (posts, reels, stories) and their performance metrics; Instagram comments on your business posts; Instagram direct messages on your business account. We do not access your personal Facebook profile, your personal Facebook friends, your personal Instagram account, or any data outside the Pages and Instagram Business accounts you explicitly authorize.</p>
 
   <p>You can revoke WatchLocal's access to any platform at any time through that platform's security settings (for example, <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener">Google Account Permissions</a> or <a href="https://www.facebook.com/settings/?tab=business_tools" target="_blank" rel="noopener">Facebook Business Integrations</a>).</p>
 
@@ -153,7 +206,7 @@ a:hover { opacity: 0.8; }
   <p>You may upload business photos, videos, and other media through our Photo/Video Drop feature. These are used exclusively to enhance your business profiles across your connected platforms. You retain full ownership of all media you provide.</p>
 
   <h3>2e. Scan and Audit Data</h3>
-  <p>We collect publicly available information about your business from search engines, AI search tools, directories, review sites, and other online platforms. This data is already public â we organize, score, and present it to help you understand and improve your visibility.</p>
+  <p>We collect publicly available information about your business from search engines, AI search tools, directories, review sites, and other online platforms. This data is already public &mdash; we organize, score, and present it to help you understand and improve your visibility.</p>
 
   <h3>2f. Usage Data</h3>
   <p>We collect basic website usage data (pages visited, time on site, device type) to improve our service. We do not use invasive tracking, advertising cookies, or third-party analytics services that follow you across the web.</p>
@@ -162,7 +215,7 @@ a:hover { opacity: 0.8; }
 
   <p>We use the information we collect to deliver the 70 actions across 10 visibility pillars that form our service. Specifically:</p>
 
-  <p><strong>Active Profile Management:</strong> Our AI agents use your connected account access to create, update, and optimize your business profiles across platforms â including posting content, uploading photos, responding to reviews, updating business information, and managing your local SEO.</p>
+  <p><strong>Active Profile Management:</strong> Our AI agents use your connected account access to create, update, and optimize your business profiles across platforms &mdash; including posting content, uploading photos, responding to reviews, updating business information, and managing your local SEO.</p>
 
   <p><strong>Visibility Monitoring:</strong> We continuously scan 80+ online platforms to track your business presence, generate visibility scores, produce audit reports, and deliver ongoing monitoring.</p>
 
@@ -178,7 +231,7 @@ a:hover { opacity: 0.8; }
     <strong>Our AI Commitment:</strong> WatchLocal uses AI agents to manage your local business presence. We believe you should know exactly how AI is involved in managing your business.
   </div>
 
-  <p>WatchLocal employs AI-powered agents that perform actions on your behalf across your connected platforms. These agents operate under human oversight â our team reviews and approves actions before they are published. Key points about our AI usage:</p>
+  <p>WatchLocal employs AI-powered agents that perform actions on your behalf across your connected platforms. These agents operate under human oversight &mdash; our team reviews and approves actions before they are published. Key points about our AI usage:</p>
 
   <p><strong>What our AI agents do:</strong> Generate business descriptions, create social media posts, optimize listing details, analyze review sentiment, identify visibility gaps, and recommend improvements.</p>
 
@@ -193,7 +246,7 @@ a:hover { opacity: 0.8; }
   <ul>
     <li>We <strong>do not sell</strong> your personal or business information to anyone, ever.</li>
     <li>We <strong>do not share</strong> your data with advertisers.</li>
-    <li>We <strong>do not access</strong> your Gmail, Google Drive, personal social media, or any services beyond what is listed in the authorization table above.</li>
+    <li>We <strong>do not access</strong> your Gmail, Google Drive, your personal Facebook profile, your personal Facebook friends, your personal Instagram account, your personal direct messages, or any service or account beyond the business assets listed in the authorization table above. The Meta scopes listed above apply <strong>only</strong> to the Facebook Pages and Instagram Business accounts you explicitly authorize through OAuth &mdash; never to personal Meta accounts.</li>
     <li>We <strong>do not store</strong> your passwords. All authentication uses OAuth tokens.</li>
     <li>We <strong>do not share</strong> your business data with your competitors.</li>
     <li>We <strong>do not use</strong> your individual data to train AI models for third parties.</li>
@@ -202,7 +255,7 @@ a:hover { opacity: 0.8; }
 
   <h2>6. Data Sharing</h2>
   <p>We share your information only in these limited circumstances:</p>
-  <p><strong>Connected Platforms:</strong> When you authorize a platform through Access Connect, we share your business information with that platform to manage your listings. This is the core of our service â we post, update, and optimize on your behalf.</p>
+  <p><strong>Connected Platforms:</strong> When you authorize a platform through Access Connect, we share your business information with that platform to manage your listings. This is the core of our service &mdash; we post, update, and optimize on your behalf.</p>
   <p><strong>Service Providers:</strong> We use trusted infrastructure providers to operate our platform, including Netlify (hosting and serverless functions), Cloudflare (network security and DNS), and Supabase (database). These providers process data on our behalf under their respective data processing agreements and are prohibited from using your data for their own purposes.</p>
   <p><strong>AI Service Providers:</strong> As noted in Section 4, we may use third-party AI services for content generation and analysis. Only the minimum data required is shared, under strict contractual protections.</p>
   <p><strong>Legal Requirements:</strong> We may disclose information when required by law, legal process, or government request, or to protect the rights, safety, or property of WatchLocal, our clients, or the public.</p>
@@ -225,7 +278,18 @@ a:hover { opacity: 0.8; }
     <li>After 30 days, or upon your request, we delete all your data from our systems.</li>
     <li>Aggregated, anonymized data that cannot identify your business may be retained indefinitely for service improvement.</li>
   </ul>
-  <p>To request immediate deletion of all your data, contact us at <a href="mailto:david@watchlocal.ai">david@watchlocal.ai</a>.</p>
+
+  <h3>8a. How to Request Data Deletion</h3>
+  <p>You can request deletion of your data &mdash; including all OAuth tokens, profile information, audit history, and any data WatchLocal collected from connected Meta, Google, or other platforms on your behalf &mdash; at any time. We process deletion requests within 7 business days of receipt.</p>
+  <p>To request data deletion, follow these steps:</p>
+  <ol>
+    <li>Send an email to <!--email_off--><a href="mailto:david@watchlocal.ai?subject=Data%20Deletion%20Request">david@watchlocal.ai</a><!--/email_off--> with the subject line <strong>"Data Deletion Request"</strong>.</li>
+    <li>Include in the email body the business name and email address associated with your WatchLocal account so we can identify the records to delete.</li>
+    <li>We will reply within 2 business days to confirm receipt and to verify the request was sent by an authorized representative of the business.</li>
+    <li>Once verified, we revoke all OAuth tokens for your connected platforms (Facebook Pages, Instagram Business, Google Business Profile, and any others), purge your business records, audit history, OAuth tokens, and uploaded media from our production storage and from backups within 7 business days.</li>
+    <li>You will receive a final confirmation email when deletion is complete.</li>
+  </ol>
+  <p>If you authorized WatchLocal through Facebook Login and want to revoke our access immediately without going through email, visit <a href="https://www.facebook.com/settings/?tab=business_tools" target="_blank" rel="noopener">Facebook Business Integrations</a>, find "WatchLocal" in the list, and remove the integration. This revokes our Meta access tokens immediately. Email us afterward to also request deletion of any business data we previously collected on your behalf.</p>
 
   <h2>9. Cookies and Tracking</h2>
   <p>We use minimal cookies necessary for site functionality (such as session management and authentication state). We do not use advertising cookies, social media tracking pixels, cross-site analytics, or any third-party trackers that follow you across the web.</p>
@@ -235,12 +299,12 @@ a:hover { opacity: 0.8; }
   <ul>
     <li><strong>Access</strong> all data we hold about your business.</li>
     <li><strong>Correct</strong> any inaccurate information.</li>
-    <li><strong>Delete</strong> your data and close your account.</li>
+    <li><strong>Delete</strong> your data and close your account (see Section 8a above).</li>
     <li><strong>Revoke</strong> platform access at any time through each platform's settings.</li>
     <li><strong>Export</strong> a copy of your data in a standard format.</li>
     <li><strong>Object</strong> to specific types of data processing.</li>
   </ul>
-  <p>To exercise any of these rights, contact us at <a href="mailto:david@watchlocal.ai">david@watchlocal.ai</a>. We will respond within 30 days.</p>
+  <p>To exercise any of these rights, contact us at <!--email_off--><a href="mailto:david@watchlocal.ai">david@watchlocal.ai</a><!--/email_off-->. We will respond within 30 days.</p>
 
   <h2>11. Children's Privacy</h2>
   <p>WatchLocal.ai is a business service not intended for individuals under 18 years of age. We do not knowingly collect personal information from minors.</p>
@@ -250,7 +314,7 @@ a:hover { opacity: 0.8; }
 
   <h2>13. Contact Us</h2>
   <p>If you have questions about this Privacy Policy, our data practices, or your rights, contact us at:</p>
-  <p><strong>Email:</strong> <a href="mailto:david@watchlocal.ai">david@watchlocal.ai</a><br>
+  <p><strong>Email:</strong> <!--email_off--><a href="mailto:david@watchlocal.ai">david@watchlocal.ai</a><!--/email_off--><br>
   <strong>Organization:</strong> WatchLocal.ai<br>
   <strong>Location:</strong> Celina, Texas</p>
 </div>
@@ -261,7 +325,7 @@ a:hover { opacity: 0.8; }
     <a href="index.html#about">About</a>
     <a href="privacy.html">Privacy</a>
     <a href="terms.html">Terms</a>
-    <a href="mailto:david@watchlocal.ai">Contact</a>
+    <!--email_off--><a href="mailto:david@watchlocal.ai">Contact</a><!--/email_off-->
   </div>
   <div class="footer-copy">&copy; 2026 WatchLocal.ai. All rights reserved.</div>
 </footer>
