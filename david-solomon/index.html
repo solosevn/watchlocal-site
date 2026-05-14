@@ -1,0 +1,1088 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>David Solomon | Anthropic Fellows Interactive Resume</title>
+  <meta name="description" content="Interactive resume and proof page for David Solomon's Anthropic Fellows application.">
+  <style>
+    :root {
+      --paper: #f6f0e7;
+      --ink: #0d1829;
+      --muted: #596574;
+      --navy: #0b2545;
+      --teal: #007c89;
+      --teal-bright: #00a8b8;
+      --amber: #c77b2a;
+      --rose: #9f3d54;
+      --green: #21725f;
+      --line: #c7d2d8;
+      --soft-teal: #dff2f2;
+      --soft-blue: #e7edf4;
+      --soft-amber: #f4e5d2;
+      --white: #fffdf9;
+      --shadow: 0 22px 70px rgba(11, 37, 69, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--paper);
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 18% 10%, rgba(0, 168, 184, 0.12), transparent 30%),
+        linear-gradient(135deg, #fbf7ef 0%, #eef7f7 52%, #f8ecdd 100%);
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 28px 0 40px;
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .rail {
+      position: sticky;
+      top: 22px;
+      min-height: calc(100vh - 44px);
+      padding: 22px;
+      border: 1px solid rgba(11, 37, 69, 0.12);
+      border-radius: 8px;
+      background: rgba(255, 253, 249, 0.82);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .name {
+      margin: 0 0 8px;
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--navy);
+      font-size: 34px;
+      line-height: 0.94;
+      letter-spacing: 0;
+    }
+
+    .role {
+      margin: 0 0 18px;
+      color: var(--teal);
+      font-weight: 800;
+      line-height: 1.25;
+      font-size: 15px;
+    }
+
+    .contact {
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+      margin-bottom: 22px;
+    }
+
+    .nav {
+      display: grid;
+      gap: 8px;
+      margin: 22px 0;
+    }
+
+    .nav a,
+    .action-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 40px;
+      padding: 9px 11px;
+      border: 1px solid rgba(11, 37, 69, 0.12);
+      border-radius: 8px;
+      color: var(--navy);
+      background: rgba(255, 255, 255, 0.58);
+      font-size: 13px;
+      font-weight: 750;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .nav a:hover,
+    .action-link:hover {
+      transform: translateY(-1px);
+      border-color: rgba(0, 124, 137, 0.45);
+      background: rgba(223, 242, 242, 0.82);
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--teal);
+      flex: 0 0 auto;
+    }
+
+    .rail-note {
+      border-top: 1px solid rgba(11, 37, 69, 0.12);
+      padding-top: 16px;
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    main {
+      display: grid;
+      gap: 18px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .panel {
+      border: 1px solid rgba(11, 37, 69, 0.12);
+      border-radius: 8px;
+      background: rgba(255, 253, 249, 0.86);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .intro {
+      padding: 26px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--amber);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 13px;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      color: var(--navy);
+      font-size: 28px;
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      margin: 0;
+      color: #1a2738;
+      font-size: 16px;
+      line-height: 1.55;
+      max-width: 66ch;
+    }
+
+    .truth-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .truth {
+      min-height: 106px;
+      border: 1px solid rgba(11, 37, 69, 0.12);
+      border-radius: 8px;
+      padding: 14px;
+      background: var(--soft-blue);
+    }
+
+    .truth:nth-child(2) { background: var(--soft-teal); }
+    .truth:nth-child(3) { background: var(--soft-amber); }
+
+    .truth b {
+      display: block;
+      color: var(--navy);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 7px;
+    }
+
+    .truth span {
+      color: #19283a;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .orbit-panel {
+      position: relative;
+      min-height: 560px;
+      padding: 24px;
+      background:
+        linear-gradient(145deg, #09192d 0%, #0b2545 48%, #133747 100%);
+      color: #f7fbff;
+    }
+
+    .orbit-title {
+      position: relative;
+      z-index: 2;
+      max-width: 290px;
+    }
+
+    .orbit-title h2 { color: #fff; font-size: 24px; }
+    .orbit-title p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.74);
+      line-height: 1.45;
+      font-size: 13px;
+    }
+
+    .wl-loop-visual {
+      position: absolute;
+      inset: 204px 0 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 0 0;
+    }
+
+    .wl-loop-container {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      margin: 0 auto;
+    }
+
+    .wl-orbit-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid rgba(0, 229, 255, 0.18);
+      box-shadow: 0 0 28px rgba(0, 229, 255, 0.08), inset 0 0 24px rgba(0, 255, 136, 0.04);
+    }
+
+    .wl-orbit-ring-inner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 162px;
+      height: 162px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 1.5px solid rgba(139, 92, 246, 0.26);
+      box-shadow: 0 0 18px rgba(139, 92, 246, 0.08), inset 0 0 15px rgba(139, 92, 246, 0.04);
+      animation: wlInnerRingSpin 30s linear infinite reverse;
+    }
+
+    .wl-inner-label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      margin-top: 46px;
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.44);
+      white-space: nowrap;
+      z-index: 5;
+    }
+
+    .wl-scraper-orbit {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 162px;
+      height: 162px;
+      transform: translate(-50%, -50%);
+      animation: wlScraperSpin var(--scraper-speed) linear infinite;
+      pointer-events: none;
+    }
+
+    .wl-scraper-dot {
+      position: absolute;
+      top: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      box-shadow: 0 0 7px currentColor;
+      opacity: 0.9;
+    }
+
+    .wl-loop-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 10;
+    }
+
+    .wl-loop-label {
+      color: #00ff88;
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1;
+      animation: wlCenterPulse 3s ease-in-out infinite;
+    }
+
+    .wl-loop-sub {
+      color: rgba(255, 255, 255, 0.48);
+      font-size: 11px;
+      margin-top: 5px;
+    }
+
+    .wl-orbit-agent {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 300px;
+      height: 300px;
+      animation: wlOrbitSpin var(--speed) linear infinite;
+    }
+
+    .wl-agent-dot {
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      background: var(--agent-color);
+      box-shadow: 0 0 14px var(--agent-glow), 0 0 28px var(--agent-glow);
+      animation: wlAgentPulse 2s ease-in-out infinite;
+      animation-delay: var(--pulse-delay, 0s);
+      z-index: 5;
+    }
+
+    .wl-agent-label {
+      position: absolute;
+      top: -34px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--agent-label-color, rgba(255,255,255,0.55));
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      opacity: 0.82;
+    }
+
+    .wl-loop-caption {
+      position: relative;
+      width: calc(100% - 48px);
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+      z-index: 4;
+    }
+
+    .wl-loop-caption span {
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 8px 9px;
+      background: rgba(255, 255, 255, 0.055);
+      color: rgba(255, 255, 255, 0.74);
+      font-size: 11px;
+      line-height: 1.25;
+    }
+
+    @keyframes wlInnerRingSpin {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    @keyframes wlScraperSpin {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    @keyframes wlOrbitSpin { to { transform: rotate(360deg); } }
+
+    @keyframes wlCenterPulse {
+      0%, 100% { opacity: 1; text-shadow: 0 0 8px rgba(0,255,136,0.35); }
+      50% { opacity: 0.72; text-shadow: 0 0 18px rgba(0,255,136,0.68); }
+    }
+
+    @keyframes wlAgentPulse {
+      0%, 100% { box-shadow: 0 0 8px var(--agent-glow), 0 0 16px var(--agent-glow); transform: translateX(-50%) scale(1); }
+      50% { box-shadow: 0 0 16px var(--agent-glow), 0 0 32px var(--agent-glow), 0 0 48px var(--agent-glow); transform: translateX(-50%) scale(1.15); }
+    }
+
+    .section {
+      padding: 24px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: end;
+      margin-bottom: 18px;
+      border-bottom: 2px solid var(--teal);
+      padding-bottom: 10px;
+    }
+
+    .section-head h2 {
+      font-size: 23px;
+      margin: 0;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      max-width: 48ch;
+      line-height: 1.4;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .project-card {
+      position: relative;
+      min-height: 286px;
+      border: 1px solid rgba(11, 37, 69, 0.13);
+      border-radius: 8px;
+      padding: 17px;
+      background: var(--white);
+      overflow: hidden;
+      transition: transform 190ms ease, border-color 190ms ease, box-shadow 190ms ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(0, 124, 137, 0.45);
+      box-shadow: 0 18px 48px rgba(11, 37, 69, 0.14);
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 950;
+      letter-spacing: 0;
+      background: var(--navy);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+    }
+
+    .logo.watch { background: linear-gradient(135deg, var(--teal), var(--navy)); }
+    .logo.arena { background: linear-gradient(135deg, #06111f, var(--teal-bright)); }
+    .logo.training { background: linear-gradient(135deg, var(--amber), var(--navy)); }
+
+    .project-card h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 18px;
+      line-height: 1.05;
+    }
+
+    .project-card .type {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 750;
+      margin-top: 4px;
+    }
+
+    .project-card p {
+      margin: 0 0 13px;
+      color: #263346;
+      line-height: 1.45;
+      font-size: 14px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .tag {
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(0, 124, 137, 0.1);
+      color: var(--teal);
+      font-size: 11px;
+      font-weight: 850;
+    }
+
+    .proof-pop {
+      position: absolute;
+      inset: auto 12px 12px;
+      border-radius: 8px;
+      padding: 13px;
+      background: rgba(11, 37, 69, 0.96);
+      color: #fff;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 180ms ease, transform 180ms ease;
+      pointer-events: none;
+    }
+
+    .project-card:hover .proof-pop {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .proof-pop b {
+      display: block;
+      color: #98eef5;
+      font-size: 12px;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .proof-pop span {
+      display: block;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .proof-pop a {
+      display: inline-block;
+      margin-top: 9px;
+      color: #ffd09c;
+      font-weight: 850;
+      font-size: 12px;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .tab {
+      border: 1px solid rgba(11, 37, 69, 0.14);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.7);
+      color: var(--navy);
+      padding: 9px 13px;
+      font-weight: 850;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+    }
+
+    .tab[aria-selected="true"] {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: #fff;
+    }
+
+    .proof-detail {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .detail-box {
+      border: 1px solid rgba(11, 37, 69, 0.12);
+      border-radius: 8px;
+      background: var(--white);
+      padding: 16px;
+      min-height: 170px;
+    }
+
+    .detail-box h3 {
+      margin: 0 0 9px;
+      color: var(--navy);
+      font-size: 17px;
+    }
+
+    .detail-box ul {
+      margin: 0;
+      padding-left: 20px;
+      color: #253448;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 11px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 112px minmax(0, 1fr);
+      gap: 12px;
+      padding: 13px;
+      border: 1px solid rgba(11, 37, 69, 0.12);
+      border-radius: 8px;
+      background: rgba(255, 253, 249, 0.74);
+    }
+
+    .when {
+      color: var(--amber);
+      font-weight: 900;
+      font-size: 13px;
+    }
+
+    .timeline-item b {
+      color: var(--navy);
+    }
+
+    .timeline-item p {
+      margin: 4px 0 0;
+      color: #263346;
+      font-size: 14px;
+      line-height: 1.43;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+      padding: 4px 2px 0;
+    }
+
+    .footer a {
+      color: var(--teal);
+      font-weight: 850;
+    }
+
+    @media (max-width: 980px) {
+      .shell,
+      .hero,
+      .proof-detail {
+        grid-template-columns: 1fr;
+      }
+
+      .rail {
+        position: relative;
+        top: 0;
+        min-height: auto;
+      }
+
+      .project-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        width: min(100% - 22px, 1180px);
+        padding-top: 12px;
+      }
+
+      .truth-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .orbit-panel {
+        min-height: 590px;
+      }
+
+      .wl-loop-visual {
+        inset: 230px 0 24px;
+      }
+
+      .wl-loop-container {
+        width: 280px;
+        height: 280px;
+      }
+
+      .wl-orbit-agent {
+        width: 280px;
+        height: 280px;
+      }
+
+      .wl-loop-caption {
+        grid-template-columns: 1fr;
+        left: 18px;
+        right: 18px;
+      }
+
+      .wl-loop-caption span {
+        min-height: 0;
+      }
+
+      .timeline-item {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .wl-orbit-ring-inner,
+      .wl-scraper-orbit,
+      .wl-orbit-agent,
+      .wl-loop-label,
+      .wl-agent-dot {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="shell">
+      <aside class="rail">
+        <h1 class="name">David<br>Solomon</h1>
+        <p class="role">Operational Excellence Leader<br>Self-Taught AI Systems Builder<br>Founder, WatchLocal.ai</p>
+        <div class="contact">
+          <span>Celina, Texas</span>
+          <a href="mailto:david@watchlocal.ai">david@watchlocal.ai</a>
+          <a href="tel:+19453582592">(945) 358-2592</a>
+          <a href="https://www.linkedin.com/in/david-solomon-a2a31842/">LinkedIn profile</a>
+        </div>
+        <nav class="nav" aria-label="Resume sections">
+          <a href="#fit"><span class="dot"></span>Anthropic Fit</a>
+          <a href="#projects"><span class="dot"></span>Proof Projects</a>
+          <a href="#system"><span class="dot"></span>Agent System</a>
+          <a href="#timeline"><span class="dot"></span>Builder Timeline</a>
+        </nav>
+        <a class="action-link" href="https://watchlocal.ai"><span class="dot"></span>watchlocal.ai</a>
+        <a class="action-link" href="https://tsarena.ai"><span class="dot"></span>tsarena.ai</a>
+        <a class="action-link" href="https://trainingrun.ai"><span class="dot"></span>trainingrun.ai</a>
+        <p class="rail-note">Built as a companion proof page to the ATS-safe resume upload.</p>
+      </aside>
+
+      <main>
+        <section class="hero" id="fit">
+          <div class="panel intro">
+            <div class="eyebrow"><span class="dot"></span> Anthropic Fellows Application</div>
+            <h2>A field-tested operator who learned AI systems by building them.</h2>
+            <p class="lead">I am not presenting myself as a lifelong software engineer. I am a lifelong builder: construction founder, Navy veteran, superintendent, project manager, operational excellence leader, Lean coach, and now a self-taught AI systems builder using modern foundation models to turn ambiguous problems into working tools.</p>
+            <div class="truth-strip">
+              <div class="truth">
+                <b>Honest Origin</b>
+                <span>30+ years building people, projects, processes, and reliability in the physical world.</span>
+              </div>
+              <div class="truth">
+                <b>Recent AI Growth</b>
+                <span>Learned AI-assisted development rapidly through APIs, agent workflows, Python/JS scripting, and real users.</span>
+              </div>
+              <div class="truth">
+                <b>Research Motive</b>
+                <span>Built public learning labs to understand model capability, safety behavior, and accountability.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel orbit-panel" id="system">
+            <div class="orbit-title">
+              <div class="eyebrow"><span class="dot"></span> WatchLocal.ai</div>
+              <h2>WatchLocal Growth Loop</h2>
+              <p>25 agents organized into 11 operating groups, driving 70 recurring actions across search, answer engines, reviews, listings, websites, content, competitors, and AI recommendations.</p>
+            </div>
+            <div class="wl-loop-visual" aria-label="WatchLocal growth loop agent animation">
+              <div class="wl-loop-container">
+                <div class="wl-orbit-ring"></div>
+                <div class="wl-loop-center">
+                  <div class="wl-loop-label">Growth Loop</div>
+                  <div class="wl-loop-sub">Runs 24/7</div>
+                </div>
+                <div class="wl-orbit-agent" style="--speed:10s; --agent-color:rgba(251,191,36,0.25); --agent-glow:rgba(251,191,36,0.5); --agent-label-color:#fbbf24; --pulse-delay:0s; animation-delay:0s;">
+                  <div class="wl-agent-label">Xavier</div><div class="wl-agent-dot">👔</div>
+                </div>
+                <div class="wl-orbit-agent" style="--speed:13s; --agent-color:rgba(0,229,255,0.2); --agent-glow:rgba(0,229,255,0.4); --agent-label-color:#00e5ff; --pulse-delay:0.2s; animation-delay:-2s;">
+                  <div class="wl-agent-label">Scout</div><div class="wl-agent-dot">🔍</div>
+                </div>
+                <div class="wl-orbit-agent" style="--speed:16s; --agent-color:rgba(255,159,67,0.2); --agent-glow:rgba(255,159,67,0.4); --agent-label-color:#ff9f43; --pulse-delay:0.4s; animation-delay:-4s;">
+                  <div class="wl-agent-label">Forge</div><div class="wl-agent-dot">🔧</div>
+                </div>
+                <div class="wl-orbit-agent" style="--speed:18s; --agent-color:rgba(0,255,136,0.2); --agent-glow:rgba(0,255,136,0.4); --agent-label-color:#00ff88; --pulse-delay:0.6s; animation-delay:-6s;">
+                  <div class="wl-agent-label">Lens</div><div class="wl-agent-dot">📊</div>
+                </div>
+                <div class="wl-orbit-agent" style="--speed:15s; --agent-color:rgba(168,85,247,0.2); --agent-glow:rgba(168,85,247,0.4); --agent-label-color:#a855f7; --pulse-delay:0.8s; animation-delay:-8s;">
+                  <div class="wl-agent-label">Atlas</div><div class="wl-agent-dot">🗺️</div>
+                </div>
+                <div class="wl-orbit-agent" style="--speed:20s; --agent-color:rgba(59,130,246,0.2); --agent-glow:rgba(59,130,246,0.4); --agent-label-color:#3b82f6; --pulse-delay:1.0s; animation-delay:-10s;">
+                  <div class="wl-agent-label">Sentinel</div><div class="wl-agent-dot">🛡️</div>
+                </div>
+                <div class="wl-orbit-agent" style="--speed:17s; --agent-color:rgba(244,114,182,0.2); --agent-glow:rgba(244,114,182,0.4); --agent-label-color:#f472b6; --pulse-delay:1.2s; animation-delay:-12s;">
+                  <div class="wl-agent-label">Beacon</div><div class="wl-agent-dot">📡</div>
+                </div>
+                <div class="wl-orbit-agent" style="--speed:22s; --agent-color:rgba(236,72,153,0.2); --agent-glow:rgba(236,72,153,0.4); --agent-label-color:#ec4899; --pulse-delay:1.4s; animation-delay:-14s;">
+                  <div class="wl-agent-label">Pulse</div><div class="wl-agent-dot">💓</div>
+                </div>
+                <div class="wl-orbit-agent" style="--speed:19s; --agent-color:rgba(34,211,238,0.2); --agent-glow:rgba(34,211,238,0.4); --agent-label-color:#22d3ee; --pulse-delay:1.6s; animation-delay:-16s;">
+                  <div class="wl-agent-label">Bridge</div><div class="wl-agent-dot">🌉</div>
+                </div>
+                <div class="wl-orbit-agent" style="--speed:14s; --agent-color:rgba(251,146,60,0.2); --agent-glow:rgba(251,146,60,0.4); --agent-label-color:#fb923c; --pulse-delay:1.8s; animation-delay:-18s;">
+                  <div class="wl-agent-label">Clock</div><div class="wl-agent-dot">⏰</div>
+                </div>
+                <div class="wl-orbit-agent" style="--speed:21s; --agent-color:rgba(139,92,246,0.2); --agent-glow:rgba(139,92,246,0.4); --agent-label-color:#8b5cf6; --pulse-delay:2.0s; animation-delay:-20s;">
+                  <div class="wl-agent-label">Amplify</div><div class="wl-agent-dot">📣</div>
+                </div>
+                <div class="wl-orbit-ring-inner"></div>
+                <div class="wl-inner-label">25 agents</div>
+                <div class="wl-scraper-orbit" style="--scraper-speed:8s; animation-delay:0s;"><div class="wl-scraper-dot" style="background:#ff6b6b;"></div></div>
+                <div class="wl-scraper-orbit" style="--scraper-speed:9s; animation-delay:-1.5s;"><div class="wl-scraper-dot" style="background:#ffa94d;"></div></div>
+                <div class="wl-scraper-orbit" style="--scraper-speed:10s; animation-delay:-3s;"><div class="wl-scraper-dot" style="background:#ffd43b;"></div></div>
+                <div class="wl-scraper-orbit" style="--scraper-speed:8.5s; animation-delay:-4.5s;"><div class="wl-scraper-dot" style="background:#69db7c;"></div></div>
+                <div class="wl-scraper-orbit" style="--scraper-speed:11s; animation-delay:-6s;"><div class="wl-scraper-dot" style="background:#38d9a9;"></div></div>
+                <div class="wl-scraper-orbit" style="--scraper-speed:9.5s; animation-delay:-7.5s;"><div class="wl-scraper-dot" style="background:#3bc9db;"></div></div>
+                <div class="wl-scraper-orbit" style="--scraper-speed:10.5s; animation-delay:-9s;"><div class="wl-scraper-dot" style="background:#4dabf7;"></div></div>
+                <div class="wl-scraper-orbit" style="--scraper-speed:8s; animation-delay:-10.5s;"><div class="wl-scraper-dot" style="background:#748ffc;"></div></div>
+                <div class="wl-scraper-orbit" style="--scraper-speed:9s; animation-delay:-12s;"><div class="wl-scraper-dot" style="background:#9775fa;"></div></div>
+                <div class="wl-scraper-orbit" style="--scraper-speed:11s; animation-delay:-13.5s;"><div class="wl-scraper-dot" style="background:#da77f2;"></div></div>
+                <div class="wl-scraper-orbit" style="--scraper-speed:10s; animation-delay:-15s;"><div class="wl-scraper-dot" style="background:#f783ac;"></div></div>
+                <div class="wl-scraper-orbit" style="--scraper-speed:8.5s; animation-delay:-16.5s;"><div class="wl-scraper-dot" style="background:#e599f7;"></div></div>
+                <div class="wl-scraper-orbit" style="--scraper-speed:9.5s; animation-delay:-18s;"><div class="wl-scraper-dot" style="background:#66d9e8;"></div></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel section" id="projects">
+          <div class="section-head">
+            <h2>Proof Projects</h2>
+            <p>Three artifacts that show how I learn: build the system, publish the method, let real users inspect the result.</p>
+          </div>
+          <div class="project-grid">
+            <article class="project-card">
+              <div class="brand-row">
+                <div class="logo watch">WL</div>
+                <div>
+                  <h3>WatchLocal.ai LLC</h3>
+                  <div class="type">Customer-facing company</div>
+                </div>
+              </div>
+              <p>Texas veteran-owned LLC providing AI-era visibility services for local small businesses across SEO, AEO, and GEO.</p>
+              <div class="tags">
+                <span class="tag">81 platforms</span>
+                <span class="tag">25 agents</span>
+                <span class="tag">OAuth</span>
+                <span class="tag">reports</span>
+              </div>
+              <div class="proof-pop">
+                <b>What this proves</b>
+                <span>Customer empathy, agentic workflow design, practical automation, and clear operating constraints.</span>
+                <a href="https://watchlocal.ai">Open WatchLocal.ai</a>
+              </div>
+            </article>
+
+            <article class="project-card">
+              <div class="brand-row">
+                <div class="logo training">TR</div>
+                <div>
+                  <h3>Training Run</h3>
+                  <div class="type">Public AI benchmark learning lab</div>
+                </div>
+              </div>
+              <p>Built to understand the model ecosystem, compare hundreds of models, and make benchmark claims easier to inspect.</p>
+              <div class="tags">
+                <span class="tag">37 sources</span>
+                <span class="tag">10 pillars</span>
+                <span class="tag">daily data</span>
+                <span class="tag">methodology</span>
+              </div>
+              <div class="proof-pop">
+                <b>What this proves</b>
+                <span>Empirical curiosity, benchmark literacy, source discipline, and transparent scoring design.</span>
+                <a href="https://trainingrun.ai">Open Training Run</a>
+              </div>
+            </article>
+
+            <article class="project-card">
+              <div class="brand-row">
+                <div class="logo arena">SA</div>
+                <div>
+                  <h3>The Safety Arena</h3>
+                  <div class="type">Public AI safety learning lab</div>
+                </div>
+              </div>
+              <p>Safety-only model ranking concept using blind battles, curated prompts, human votes, and anti-gaming architecture.</p>
+              <div class="tags">
+                <span class="tag">blind battles</span>
+                <span class="tag">safety prompts</span>
+                <span class="tag">vote integrity</span>
+                <span class="tag">audit logs</span>
+              </div>
+              <div class="proof-pop">
+                <b>What this proves</b>
+                <span>Alignment motivation, adversarial thinking, public accountability, and human-centered evaluation design.</span>
+                <a href="https://tsarena.ai">Open TS Arena</a>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel section">
+          <div class="section-head">
+            <h2>Evidence Map</h2>
+            <p>Selected signals matched to Fellows criteria: implement quickly, communicate clearly, and work on empirical AI projects.</p>
+          </div>
+          <div class="tabs" role="tablist" aria-label="Evidence categories">
+            <button class="tab" role="tab" aria-selected="true" data-proof="systems">Systems</button>
+            <button class="tab" role="tab" aria-selected="false" data-proof="safety">Safety</button>
+            <button class="tab" role="tab" aria-selected="false" data-proof="operator">Operator</button>
+          </div>
+          <div class="proof-detail" id="proofDetail">
+            <div class="detail-box">
+              <h3>Built Working Systems</h3>
+              <ul>
+                <li>WatchLocal.ai autonomous local visibility workflow.</li>
+                <li>Training Run benchmark aggregation and public methodology.</li>
+                <li>Safety Arena blind battle / vote integrity concept.</li>
+              </ul>
+            </div>
+            <div class="detail-box">
+              <h3>Practical Technical Stack</h3>
+              <ul>
+                <li>Python and JavaScript scripting, HTML/CSS, APIs, JSON, Markdown.</li>
+                <li>Supabase, PostgreSQL, Edge Functions, RLS, JWT, OAuth.</li>
+                <li>Telegram and agent communication workflows.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel section" id="timeline">
+          <div class="section-head">
+            <h2>Builder Timeline</h2>
+            <p>The through-line is systems: physical construction, operational excellence, then AI-assisted tools.</p>
+          </div>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="when">1988-1994</div>
+              <div><b>United States Navy</b><p>Signalman / Customs Officer; high-stakes communication and Gulf War / Operation Desert Shield service.</p></div>
+            </div>
+            <div class="timeline-item">
+              <div class="when">1995-2005</div>
+              <div><b>Owner & Founder</b><p>Grew a residential and light commercial construction company with up to 14 team members.</p></div>
+            </div>
+            <div class="timeline-item">
+              <div class="when">2012-Present</div>
+              <div><b>Turner Construction</b><p>Project Manager, then Operational Excellence Manager: Daily Management Systems, A3, Lean, leadership coaching, and practical reliability.</p></div>
+            </div>
+            <div class="timeline-item">
+              <div class="when">2026</div>
+              <div><b>WatchLocal.ai, Training Run, Safety Arena</b><p>Self-directed AI systems learning turned into public proof: customer-facing automation, model benchmarking, and safety evaluation concepts.</p></div>
+            </div>
+          </div>
+        </section>
+
+        <div class="footer">
+          <span>David Solomon | Anthropic Fellows application companion</span>
+          <span><a href="mailto:david@watchlocal.ai">david@watchlocal.ai</a> | <a href="tel:+19453582592">(945) 358-2592</a></span>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const data = {
+      systems: [
+        {
+          title: "Built Working Systems",
+          items: [
+            "WatchLocal.ai autonomous local visibility workflow.",
+            "Training Run benchmark aggregation and public methodology.",
+            "Safety Arena blind battle / vote integrity concept."
+          ]
+        },
+        {
+          title: "Practical Technical Stack",
+          items: [
+            "Python and JavaScript scripting, HTML/CSS, APIs, JSON, Markdown.",
+            "Supabase, PostgreSQL, Edge Functions, RLS, JWT, OAuth.",
+            "Telegram and agent communication workflows."
+          ]
+        }
+      ],
+      safety: [
+        {
+          title: "Safety Evaluation Thinking",
+          items: [
+            "Safety-only ranking rather than general preference.",
+            "Curated prompts across harm refusal, jailbreaks, truth pressure, vulnerable users, coercion, and bias.",
+            "Blind voting to reduce brand bias."
+          ]
+        },
+        {
+          title: "Anti-Gaming Architecture",
+          items: [
+            "Verified accounts, rate limits, device fingerprints, reading timers, and behavioral telemetry.",
+            "Server-side validation, database constraints, row-level security, and public audit principles.",
+            "Designed around integrity over raw volume."
+          ]
+        }
+      ],
+      operator: [
+        {
+          title: "Lean Operating Pattern",
+          items: [
+            "Clarify purpose before building.",
+            "Remove waste and simplify the flow.",
+            "Make problems visible through metrics, cadence, and customer feedback."
+          ]
+        },
+        {
+          title: "Why This Matters For Fellows",
+          items: [
+            "Comfortable with ambiguity and fast iteration.",
+            "Can communicate technical systems in plain language.",
+            "Has lived experience building reliable systems with people, not only code."
+          ]
+        }
+      ]
+    };
+
+    const tabs = Array.from(document.querySelectorAll(".tab"));
+    const detail = document.getElementById("proofDetail");
+
+    function renderProof(key) {
+      detail.innerHTML = data[key].map(box => `
+        <div class="detail-box">
+          <h3>${box.title}</h3>
+          <ul>${box.items.map(item => `<li>${item}</li>`).join("")}</ul>
+        </div>
+      `).join("");
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        tabs.forEach(t => t.setAttribute("aria-selected", "false"));
+        tab.setAttribute("aria-selected", "true");
+        renderProof(tab.dataset.proof);
+      });
+    });
+  </script>
+</body>
+</html>
