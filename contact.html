@@ -148,6 +148,9 @@ body > * { position: relative; z-index: 1; }
 .footer-links a { font-size: 0.85rem; color: var(--text-dim); }
 .footer-links a:hover { color: var(--cyan); }
 .footer-copy { font-size: 0.8rem; color: #546e7a; }
+
+/* === S159: WebGL background takes over — hide CSS texture layers when active === */
+body.gl-bg-active::before, body.gl-bg-active::after { display: none !important; }
 </style>
 </head>
 <body>
@@ -209,6 +212,7 @@ body > * { position: relative; z-index: 1; }
   <div class="footer-copy">&copy; 2026 WatchLocal.ai. All rights reserved.</div>
 </footer>
 
-<script src="js/saber-trail.js?v=5" defer></script>
+<script src="js/saber-trail.js?v=6" defer></script>
+<script src="js/glitch-bg.js?v=6" defer></script>
 </body>
 </html>
