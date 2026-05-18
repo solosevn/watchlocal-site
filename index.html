@@ -9,7 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #060d1a;
+  --bg: #0a0e14;
+  --orange-soft: rgba(255, 122, 0, 0.20);
   --bg-card: #0c1829;
   --border: #1a2d4a;
   --cyan: #00e5ff;
@@ -423,7 +424,38 @@ a:hover { opacity: 0.8; }
   .nav { top: 44px; }
   .nav-inner { height: 40px; }
 }
-.wl-social{display:flex;justify-content:center;gap:14px;margin:32px auto 14px;max-width:240px}.wl-social a{width:40px;height:40px;border:1.5px solid var(--cyan);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--white);text-decoration:none;transition:background .15s,color .15s}.wl-social a:hover{background:var(--cyan);color:var(--bg)}.wl-social svg{display:block}</style>
+.wl-social{display:flex;justify-content:center;gap:14px;margin:32px auto 14px;max-width:240px}.wl-social a{width:40px;height:40px;border:1.5px solid var(--cyan);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--white);text-decoration:none;transition:background .15s,color .15s}.wl-social a:hover{background:var(--cyan);color:var(--bg)}.wl-social svg{display:block}
+/* === S159: portal-v2 carbon-fiber/leather texture port === */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1100px circle at 12% -8%, rgba(0,229,255,0.10), transparent 60%),
+    radial-gradient(900px circle at 110% 110%, var(--orange-soft), transparent 55%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: auto, auto, 220px 220px;
+}
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(45deg,  rgba(255,255,255,0.026) 0 1px, transparent 1px 7px),
+    repeating-linear-gradient(45deg,  rgba(0,0,0,0.22)        3px 4px, transparent 4px 7px),
+    repeating-linear-gradient(-45deg, rgba(255,255,255,0.022) 0 1px, transparent 1px 7px),
+    repeating-linear-gradient(-45deg, rgba(0,0,0,0.20)        3px 4px, transparent 4px 7px),
+    repeating-linear-gradient(115deg, rgba(255,255,255,0.010) 0 2px, transparent 2px 14px);
+  mix-blend-mode: overlay;
+  opacity: 0.92;
+}
+body > * { position: relative; z-index: 1; }
+
+</style>
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
