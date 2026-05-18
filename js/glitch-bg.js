@@ -1,8 +1,7 @@
-/* WatchLocal.ai — WebGL background with cursor-TRAIL tile-fracture
-   v4: cracks follow the trail (sword cutting through Earth crust), not a circle.
-       Trail mask canvas paints cursor path, fades over ~700ms.
-       Tiles crack proportional to trail intensity at their location.
-       Cyan glow shows through cracks. Texture is unchanged. */
+/* WatchLocal.ai — WebGL bg with seam-based diagonal crack fracture
+   v5: Cracks open along the carbon-fiber's OWN diagonal weave lines
+   (its natural fault lines), revealing cyan layer beneath. As trail
+   fades, the weave seals back up. No orthogonal tile artifacts. */
 (function () {
   function isMobile() {
     if (window.innerWidth < 768) return true;
@@ -10,7 +9,6 @@
   }
   if (isMobile()) return;
 
-  // Main WebGL canvas (background)
   var canvas = document.createElement('canvas');
   canvas.id = 'gl-bg-canvas';
   canvas.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-1;pointer-events:none;';
@@ -22,9 +20,8 @@
   if (!gl) { canvas.remove(); return; }
   document.body.classList.add('gl-bg-active');
 
-  // Trail-mask canvas (CPU side, low-res, 2D)
-  var TRAIL_W = 512;
-  var TRAIL_H = 512;
+  // Trail mask canvas
+  var TRAIL_W = 512, TRAIL_H = 512;
   var trailCanvas = document.createElement('canvas');
   trailCanvas.width = TRAIL_W;
   trailCanvas.height = TRAIL_H;
@@ -32,7 +29,6 @@
   trailCtx.fillStyle = '#000';
   trailCtx.fillRect(0, 0, TRAIL_W, TRAIL_H);
 
-  // === SHADER ===
   var VERT = [
     'attribute vec2 a_pos;',
     'void main() { gl_Position = vec4(a_pos, 0.0, 1.0); }'
@@ -41,7 +37,6 @@
   var FRAG = [
     'precision highp float;',
     'uniform vec2 uResolution;',
-    'uniform float uTime;',
     'uniform float uPxScale;',
     'uniform sampler2D uTrail;',
     '',
@@ -65,50 +60,57 @@
     '  vec2 uv = px / res;',
     '  vec2 cssPx = px / uPxScale;',
     '',
-    '  // === TEXTURE (unchanged carbon-fiber + halos + grain) ===',
-    '  vec3 col = vec3(0.039, 0.055, 0.078);',
+    '  // === TRAIL INTENSITY AT THIS PIXEL ===',
+    '  float trail = texture2D(uTrail, uv).r;',
+    '',
+    '  // === TEXTURE COLOR (carbon fiber + halos + grain — unchanged) ===',
+    '  vec3 texCol = vec3(0.039, 0.055, 0.078);',
     '  vec2 halo1 = vec2(0.10, 0.95);',
     '  float h1 = exp(-length((uv - halo1) * vec2(1.8, 1.5)) * 1.3);',
-    '  col += vec3(0.0, 0.9, 1.0) * h1 * 0.09;',
+    '  texCol += vec3(0.0, 0.9, 1.0) * h1 * 0.09;',
     '  vec2 halo2 = vec2(1.05, 0.05);',
     '  float h2 = exp(-length((uv - halo2) * vec2(1.8, 1.5)) * 1.3);',
-    '  col += vec3(1.0, 0.48, 0.0) * h2 * 0.20;',
+    '  texCol += vec3(1.0, 0.48, 0.0) * h2 * 0.20;',
     '  float p45 = mod(dot(cssPx, vec2(0.7071, 0.7071)), 7.0);',
-    '  col += step(p45, 1.0) * vec3(0.026);',
-    '  col -= step(3.0, p45) * (1.0 - step(4.0, p45)) * vec3(0.22);',
+    '  texCol += step(p45, 1.0) * vec3(0.026);',
+    '  texCol -= step(3.0, p45) * (1.0 - step(4.0, p45)) * vec3(0.22);',
     '  float pm45 = mod(dot(cssPx, vec2(0.7071, -0.7071)), 7.0);',
-    '  col += step(pm45, 1.0) * vec3(0.022);',
-    '  col -= step(3.0, pm45) * (1.0 - step(4.0, pm45)) * vec3(0.20);',
+    '  texCol += step(pm45, 1.0) * vec3(0.022);',
+    '  texCol -= step(3.0, pm45) * (1.0 - step(4.0, pm45)) * vec3(0.20);',
     '  float p115 = mod(dot(cssPx, vec2(-0.4226, 0.9063)), 14.0);',
-    '  col += step(p115, 2.0) * vec3(0.010);',
+    '  texCol += step(p115, 2.0) * vec3(0.010);',
     '  float grain = fbm(cssPx * 0.85) * 0.05 - 0.025;',
-    '  col += vec3(grain);',
+    '  texCol += vec3(grain);',
     '',
-    '  // === TRAIL-DRIVEN TILE FRACTURE ===',
-    '  float CELL = 16.0;',
-    '  vec2 cellId = floor(cssPx / CELL);',
-    '  vec2 cellCenter = (cellId + 0.5) * CELL;',
-    '  // Sample trail texture at this tile center',
-    '  vec2 cssRes = res / uPxScale;',
-    '  vec2 cellUV = cellCenter / cssRes;',
-    '  float trail = texture2D(uTrail, cellUV).r;',
-    '  // Per-tile randomness for staggered cracking',
-    '  float cellRand = hash(cellId);',
-    '  float openAmt = clamp(trail * 1.8 - cellRand * 0.3, 0.0, 1.0);',
+    '  // === SEAM PROXIMITY (distance to nearest carbon-fiber weave line) ===',
+    '  // Both +45deg and -45deg lines have a 7px period.',
+    '  // Compute signed distance to the NEAREST line of each family, then min.',
+    '  float seam45 = abs(mod(dot(cssPx, vec2(0.7071, 0.7071)) + 3.5, 7.0) - 3.5);',
+    '  float seamPm45 = abs(mod(dot(cssPx, vec2(0.7071, -0.7071)) + 3.5, 7.0) - 3.5);',
+    '  float seamDist = min(seam45, seamPm45);  // 0 at seam, up to ~3.5 in tile centers',
     '',
-    '  vec2 cellLocal = abs(cssPx - cellCenter);',
-    '  float cellMaxDim = max(cellLocal.x, cellLocal.y);',
-    '  float tileExtent = (CELL * 0.5 - 0.5) * (1.0 - openAmt * 0.8);',
-    '  float insideTile = step(cellMaxDim, tileExtent);',
+    '  // === RANDOM PER-LOCATION OFFSET so not every seam cracks at the same trail level ===',
+    '  // 3.5 CSS-px cell hash → coarse stagger so neighboring seams crack at different times',
+    '  vec2 staggerCell = floor(cssPx / 5.0);',
+    '  float staggerRand = hash(staggerCell);',
     '',
-    '  // Cyan glow beneath',
-    '  vec3 underColor = vec3(0.05, 0.85, 1.0) * 0.55;',
-    '  col = mix(underColor, col, insideTile);',
+    '  // === CRACK INTENSITY ===',
+    '  // Cracks form where trail is hot AND we are close to a seam',
+    '  // staggerRand modulates which seams crack first',
+    '  float trailMod = trail * (1.0 + staggerRand * 0.4);',
+    '  float seamFactor = 1.0 - smoothstep(0.2, 2.5, seamDist);',
+    '  // 1 right on the seam, 0 by 2.5px away',
+    '  float crackOpen = clamp(trailMod * seamFactor * 2.5, 0.0, 1.0);',
     '',
-    '  // Bright edge glow at crack',
-    '  float edgeBand = smoothstep(tileExtent, tileExtent + 1.0, cellMaxDim) -',
-    '                   smoothstep(tileExtent + 2.0, tileExtent + 3.0, cellMaxDim);',
-    '  col += vec3(0.2, 1.0, 1.0) * edgeBand * openAmt;',
+    '  // === CYAN UNDERLAYER (always present beneath the texture) ===',
+    '  vec3 cyanUnder = vec3(0.05, 0.85, 1.0) * 0.55;',
+    '',
+    '  // === COMPOSITE: texture on top, cyan beneath, crack reveals cyan ===',
+    '  vec3 col = mix(texCol, cyanUnder, crackOpen);',
+    '',
+    '  // === HOT EDGE GLOW exactly at the seam midpoint ===',
+    '  float seamGlow = (1.0 - smoothstep(0.0, 0.8, seamDist)) * trail;',
+    '  col += vec3(0.2, 1.0, 1.0) * seamGlow * 0.6;',
     '',
     '  gl_FragColor = vec4(col, 1.0);',
     '}'
@@ -150,11 +152,9 @@
   gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
 
   var uResLoc = gl.getUniformLocation(program, 'uResolution');
-  var uTimeLoc = gl.getUniformLocation(program, 'uTime');
   var uPxLoc = gl.getUniformLocation(program, 'uPxScale');
   var uTrailLoc = gl.getUniformLocation(program, 'uTrail');
 
-  // Trail texture setup
   var trailTex = gl.createTexture();
   gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_2D, trailTex);
@@ -175,14 +175,13 @@
   resize();
   window.addEventListener('resize', resize);
 
-  // === TRAIL PAINTING ===
   function paintTrail(clientX, clientY) {
     var tx = (clientX / window.innerWidth) * TRAIL_W;
     var ty = (clientY / window.innerHeight) * TRAIL_H;
-    var radius = 8;
+    var radius = 6;  // tighter brush
     var grad = trailCtx.createRadialGradient(tx, ty, 0, tx, ty, radius);
-    grad.addColorStop(0, 'rgba(255,255,255,0.9)');
-    grad.addColorStop(0.6, 'rgba(255,255,255,0.4)');
+    grad.addColorStop(0, 'rgba(255,255,255,0.5)');   // lighter brush so trail doesnt saturate
+    grad.addColorStop(0.6, 'rgba(255,255,255,0.2)');
     grad.addColorStop(1, 'rgba(255,255,255,0)');
     trailCtx.fillStyle = grad;
     trailCtx.beginPath();
@@ -192,7 +191,6 @@
 
   var lastPaintX = -1, lastPaintY = -1;
   window.addEventListener('mousemove', function (e) {
-    // Interpolate brush strokes between last and current position for smooth trail
     if (lastPaintX !== -1) {
       var dx = e.clientX - lastPaintX;
       var dy = e.clientY - lastPaintY;
@@ -209,26 +207,20 @@
     lastPaintY = e.clientY;
   });
 
-  // === RENDER LOOP ===
-  var startTime = performance.now();
   function render() {
     if (document.hidden) { requestAnimationFrame(render); return; }
-    var t = (performance.now() - startTime) / 1000;
 
-    // Fade trail canvas each frame (cracks heal)
+    // Fade trail FAST so cracks heal quickly behind cursor
     trailCtx.globalCompositeOperation = 'destination-out';
-    trailCtx.fillStyle = 'rgba(0,0,0,0.045)'; // ~4.5% per frame → ~700ms full decay
+    trailCtx.fillStyle = 'rgba(0,0,0,0.085)';  // ~8.5% per frame → ~200ms full decay
     trailCtx.fillRect(0, 0, TRAIL_W, TRAIL_H);
     trailCtx.globalCompositeOperation = 'source-over';
 
-    // Upload trail canvas to texture
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, trailTex);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, trailCanvas);
 
-    // Draw
     gl.uniform2f(uResLoc, canvas.width, canvas.height);
-    gl.uniform1f(uTimeLoc, t);
     gl.uniform1f(uPxLoc, dpr);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
 
