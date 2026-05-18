@@ -15,7 +15,7 @@
   --border: #1a2d4a;
   --cyan: #00e5ff;
   --green: #00ff88;
-  --orange: #ff9f43;
+  --orange: #ff7a00;
   --text: #e2e8f0;
   --text-dim: #8892a4;
   --white: #ffffff;
@@ -36,9 +36,9 @@ a:hover { opacity: 0.8; }
 /* Nav */
 .nav {
   position: fixed; top: 52px; left: 0; right: 0; z-index: 100;
-  background: rgba(6,13,26,0.92);
+  background: rgba(10,14,20,0.55);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(26,45,74,0.5);
+  border-bottom: 1px solid rgba(255,122,0,0.45);
   padding: 0 24px;
 }
 .nav-inner {
@@ -63,7 +63,7 @@ a:hover { opacity: 0.8; }
 .hero {
   padding: 166px 24px 80px;
   text-align: center;
-  background: linear-gradient(180deg, #0a1628 0%, var(--bg) 100%);
+  background: transparent;
   position: relative;
   overflow: hidden;
 }
@@ -209,7 +209,7 @@ a:hover { opacity: 0.8; }
 .founder-info p { margin-top: 16px; color: var(--text); line-height: 1.8; }
 
 /* Divider */
-.divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 0 auto; max-width: 800px; }
+.divider { height: 1px; background: linear-gradient(90deg, transparent, var(--orange), transparent); margin: 0 auto; max-width: 800px; }
 
 /* CTA */
 .cta-section { text-align: center; padding: 72px 24px 80px; max-width: 800px; margin: 0 auto; }
@@ -237,9 +237,9 @@ a:hover { opacity: 0.8; }
 /* ── Nav ── */
 .nav {
   position: fixed; top: 52px; left: 0; right: 0; z-index: 100;
-  background: rgba(6,13,26,0.92);
+  background: rgba(10,14,20,0.55);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(26,45,74,0.5);
+  border-bottom: 1px solid rgba(255,122,0,0.45);
   padding: 0 24px;
 }
 .nav-inner {
@@ -264,7 +264,7 @@ a:hover { opacity: 0.8; }
 .hero {
   padding: 166px 24px 80px;
   text-align: center;
-  background: linear-gradient(180deg, #0a1628 0%, var(--bg) 100%);
+  background: transparent;
   position: relative;
   overflow: hidden;
 }
@@ -336,7 +336,7 @@ a:hover { opacity: 0.8; }
 .founder-info p { margin-top: 16px; color: var(--text); line-height: 1.8; }
 
 /* ── Divider ── */
-.divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 0 auto; max-width: 800px; }
+.divider { height: 1px; background: linear-gradient(90deg, transparent, var(--orange), transparent); margin: 0 auto; max-width: 800px; }
 
 /* ── Footer ── */
 .footer {
@@ -367,8 +367,9 @@ a:hover { opacity: 0.8; }
 /* ── Ticker ── */
 .ticker-bar {
   position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-  background: linear-gradient(90deg, #041020 0%, #081830 50%, #041020 100%);
-  border-bottom: 1px solid rgba(0,229,255,0.15);
+  background: rgba(10,14,20,0.55);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,122,0,0.45);
   height: 52px;
   overflow: hidden;
   display: flex;
