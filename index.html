@@ -125,8 +125,8 @@ a:hover { opacity: 0.8; }
 }
 .bf-card { position: relative; transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease; }
 .bf-card:hover { border-color: rgba(0,229,255,0.7); transform: translateY(-5px); box-shadow: 0 0 32px rgba(0,229,255,0.25), 0 8px 20px rgba(0,0,0,0.5); }
-.bf-card:hover .bf-tag { color: #00ffff; text-shadow: 0 0 8px rgba(0,229,255,0.65); }
-.bf-tag { transition: color 0.2s ease, text-shadow 0.2s ease; }
+.bf-card:hover .bf-tag { color: #ff7a00; text-shadow: 0 0 14px rgba(255,122,0,0.75), 0 0 24px rgba(255,122,0,0.35); transform: scale(1.18); }
+.bf-tag { transition: color 0.22s ease, text-shadow 0.22s ease, transform 0.22s ease; transform-origin: center; display: inline-block; }
 .bf-tooltip { position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%) translateY(4px); background: rgba(0,229,255,0.96); color: #060d1a; padding: 7px 16px; border-radius: 6px; font-family: 'Space Grotesk', sans-serif; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.5px; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.2s ease, transform 0.2s ease; z-index: 10; box-shadow: 0 4px 14px rgba(0,229,255,0.4); }
 .bf-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 6px solid rgba(0,229,255,0.96); }
 .bf-tooltip.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
