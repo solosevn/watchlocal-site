@@ -60,9 +60,9 @@
     '  // === CURSOR DISPLACEMENT ===',
     '  vec2 md = px - uMouse;',
     '  float dist = length(md);',
-    '  float radius = 240.0 * uPxScale;',
+    '  float radius = 150.0 * uPxScale;',
     '  float falloff = smoothstep(radius, 0.0, dist);',
-    '  float strength = falloff * uActivity * 32.0 * uPxScale;',
+    '  float strength = falloff * uActivity * 24.0 * uPxScale;',
     '  float ang = noise(px * 0.018 + uTime * 0.7) * 6.2832;',
     '  vec2 disp = vec2(cos(ang), sin(ang)) * strength;',
     '  vec2 dispPx = px + disp;',
@@ -96,7 +96,11 @@
     '  float grain = fbm(dispCss * 0.85) * 0.05 - 0.025;',
     '  col += vec3(grain);',
     '',
-    '  gl_FragColor = vec4(col, 1.0);',
+    '  // Subtle cyan tint inside the disruption (fades with distance + activity)',
+'  float tintAmt = falloff * uActivity * 0.18;',
+'  col = mix(col, vec3(0.0, 0.8, 1.0), tintAmt);',
+'',
+'  gl_FragColor = vec4(col, 1.0);',
     '}'
   ].join('\n');
 
