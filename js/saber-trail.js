@@ -1,9 +1,10 @@
-/* WatchLocal.ai — orange mouse trail + lightsaber hum
-   Visual: canvas particle trail in #ff7a00, fades over ~35 frames (~600ms).
-   Audio: Web Audio API procedural saber hum, modulated by mouse speed.
-   Audio unlocks after any user click (browser autoplay policy). */
+/* WatchLocal.ai — orange mouse trail + lightsaber hum (v2: refined)
+   v1 was too bright/thick visually and too low/loud audibly.
+   v2: thinner dimmer trail to match the orange divider lines;
+       lightsaber audio with proper saber tone (sawtooth 200Hz + harmonics
+       + filtered noise buzz) at much lower volume. */
 (function () {
-  // -------- VISUAL: ORANGE PARTICLE TRAIL --------
+  // -------- VISUAL: ORANGE PARTICLE TRAIL (THIN, DIM) --------
   var canvas = document.createElement('canvas');
   canvas.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:9999;';
   canvas.setAttribute('aria-hidden', 'true');
@@ -15,33 +16,33 @@
   function resize() {
     canvas.width = window.innerWidth * dpr;
     canvas.height = window.innerHeight * dpr;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.scale(dpr, dpr);
   }
   resize();
   window.addEventListener('resize', resize);
 
   var particles = [];
-  var MAX_PARTICLES = 80;
+  var MAX_PARTICLES = 100;
   var lastX = -1, lastY = -1;
 
   window.addEventListener('mousemove', function (e) {
-    // Interpolate between last and current position for smoother trail
     if (lastX !== -1) {
       var dx = e.clientX - lastX;
       var dy = e.clientY - lastY;
       var dist = Math.sqrt(dx * dx + dy * dy);
-      var steps = Math.min(8, Math.max(1, Math.floor(dist / 6)));
+      var steps = Math.min(10, Math.max(1, Math.floor(dist / 4)));
       for (var i = 0; i < steps; i++) {
         var t = (i + 1) / steps;
         particles.push({
           x: lastX + dx * t,
           y: lastY + dy * t,
           age: 0,
-          max: 35
+          max: 28
         });
       }
     } else {
-      particles.push({ x: e.clientX, y: e.clientY, age: 0, max: 35 });
+      particles.push({ x: e.clientX, y: e.clientY, age: 0, max: 28 });
     }
     lastX = e.clientX;
     lastY = e.clientY;
@@ -57,10 +58,12 @@
       p.age++;
       if (p.age >= p.max) { particles.splice(i, 1); continue; }
       var alpha = 1 - (p.age / p.max);
-      var radius = 7 * alpha + 1;
-      ctx.shadowBlur = 18;
-      ctx.shadowColor = 'rgba(255,122,0,' + alpha + ')';
-      ctx.fillStyle = 'rgba(255,180,80,' + (alpha * 0.95) + ')';
+      // THIN: max radius 1.8px tapering to 0.4px (was 7px)
+      var radius = 1.4 * alpha + 0.4;
+      // DIM: peak alpha ~0.4 instead of ~0.95
+      ctx.shadowBlur = 6;
+      ctx.shadowColor = 'rgba(255,122,0,' + (alpha * 0.5) + ')';
+      ctx.fillStyle = 'rgba(255,122,0,' + (alpha * 0.45) + ')';
       ctx.beginPath();
       ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
       ctx.fill();
@@ -69,12 +72,11 @@
   }
   render();
 
-  // -------- AUDIO: PROCEDURAL LIGHTSABER HUM --------
+  // -------- AUDIO: PROCEDURAL LIGHTSABER HUM (REFINED) --------
   var audioCtx = null;
   var masterGain = null;
   var mouseSpeed = 0;
   var lastMoveX = 0, lastMoveY = 0, lastMoveTime = 0;
-  var targetVolume = 0;
 
   function initAudio() {
     if (audioCtx) return;
@@ -83,78 +85,115 @@
       if (!AC) return;
       audioCtx = new AC();
 
-      // Two oscillators for the saber tone (fundamental + octave harmonic)
+      // === SABER TONE BODY ===
+      // Fundamental at 200Hz (recognizable saber pitch, not too bass)
       var osc1 = audioCtx.createOscillator();
       osc1.type = 'sawtooth';
-      osc1.frequency.value = 65;
+      osc1.frequency.value = 200;
 
+      // Octave harmonic
       var osc2 = audioCtx.createOscillator();
-      osc2.type = 'square';
-      osc2.frequency.value = 130;
+      osc2.type = 'triangle';
+      osc2.frequency.value = 400;
 
-      // LFO for the iconic saber wobble
+      // 3rd harmonic for richness
+      var osc3 = audioCtx.createOscillator();
+      osc3.type = 'sine';
+      osc3.frequency.value = 720;
+
+      // LFO for saber wobble — modulates frequency subtly
       var lfo = audioCtx.createOscillator();
       lfo.type = 'sine';
-      lfo.frequency.value = 4.5;
+      lfo.frequency.value = 5;
       var lfoGain = audioCtx.createGain();
-      lfoGain.gain.value = 3.5;
+      lfoGain.gain.value = 4;
       lfo.connect(lfoGain);
       lfoGain.connect(osc1.frequency);
       lfoGain.connect(osc2.frequency);
 
-      // Warm low-pass filter
+      // === BUZZ / SIZZLE LAYER ===
+      // White noise through narrow band-pass for the iconic "buzz" character
+      var noiseBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 2, audioCtx.sampleRate);
+      var noiseData = noiseBuffer.getChannelData(0);
+      for (var n = 0; n < noiseData.length; n++) {
+        noiseData[n] = Math.random() * 2 - 1;
+      }
+      var noiseSource = audioCtx.createBufferSource();
+      noiseSource.buffer = noiseBuffer;
+      noiseSource.loop = true;
+
+      var noiseFilter = audioCtx.createBiquadFilter();
+      noiseFilter.type = 'bandpass';
+      noiseFilter.frequency.value = 850;
+      noiseFilter.Q.value = 8;
+
+      var noiseGain = audioCtx.createGain();
+      noiseGain.gain.value = 0.3; // noise is mixed in at 30% of master
+
+      noiseSource.connect(noiseFilter);
+      noiseFilter.connect(noiseGain);
+
+      // === MIX / FILTER / OUTPUT ===
+      var toneMix = audioCtx.createGain();
+      toneMix.gain.value = 0.7;
+      osc1.connect(toneMix);
+      osc2.connect(toneMix);
+      osc3.connect(toneMix);
+
+      // Master low-pass keeps things warm
       var filter = audioCtx.createBiquadFilter();
       filter.type = 'lowpass';
-      filter.frequency.value = 800;
-      filter.Q.value = 4;
+      filter.frequency.value = 1500;
+      filter.Q.value = 2;
 
-      // Master gain (volume) — starts silent
+      toneMix.connect(filter);
+      noiseGain.connect(filter);
+
+      // Master gain — starts silent, ramps with mouse speed
       masterGain = audioCtx.createGain();
       masterGain.gain.value = 0;
-
-      osc1.connect(filter);
-      osc2.connect(filter);
       filter.connect(masterGain);
       masterGain.connect(audioCtx.destination);
 
       osc1.start();
       osc2.start();
+      osc3.start();
       lfo.start();
+      noiseSource.start();
     } catch (e) {
-      // Audio failed — silently no-op, visual trail still works
+      // silently no-op
     }
   }
 
-  // Track mouse speed continuously
   window.addEventListener('mousemove', function (e) {
     var now = performance.now();
     var dt = Math.max(1, now - lastMoveTime);
     var dx = e.clientX - lastMoveX;
     var dy = e.clientY - lastMoveY;
     var dist = Math.sqrt(dx * dx + dy * dy);
-    mouseSpeed = (dist / dt) * 1000; // pixels per second
+    mouseSpeed = (dist / dt) * 1000;
     lastMoveX = e.clientX;
     lastMoveY = e.clientY;
     lastMoveTime = now;
   });
 
-  // Update saber volume ~30fps based on mouse activity
+  // Volume modulation — much quieter overall
   setInterval(function () {
     if (!audioCtx || !masterGain) return;
     var now = performance.now();
     var sinceLast = now - lastMoveTime;
-    // Volume target: 0 when still, up to 0.15 when moving fast
+    var targetVolume;
     if (sinceLast > 250) {
       targetVolume = 0;
     } else {
-      var speedNorm = Math.min(1, mouseSpeed / 1200);
-      targetVolume = 0.03 + speedNorm * 0.12; // 0.03 (faint idle) to 0.15 (max)
+      var speedNorm = Math.min(1, mouseSpeed / 1500);
+      // QUIETER: 0.01 idle → 0.05 max (was 0.03 → 0.15)
+      targetVolume = 0.01 + speedNorm * 0.04;
     }
     masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
     masterGain.gain.linearRampToValueAtTime(targetVolume, audioCtx.currentTime + 0.12);
   }, 33);
 
-  // Browser autoplay policy: audio context must be unlocked by user gesture
   function unlockAudio() {
     initAudio();
     if (audioCtx && audioCtx.state === 'suspended') {
