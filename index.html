@@ -162,6 +162,9 @@ a:hover { opacity: 0.8; }
   transition: border-color 0.3s;
 }
 .inc-card:hover { border-color: rgba(0,229,255,0.3); }
+.inc-card.inc-solo { grid-column: 1 / -1; max-width: calc(50% - 8px); justify-self: center; width: 100%; }
+@media (max-width: 768px) { .inc-card.inc-solo { max-width: none; } }
+
 .inc-icon {
   width: 44px; height: 44px; border-radius: 10px;
   background: rgba(0,229,255,0.08); border: 1px solid rgba(0,229,255,0.15);
@@ -570,13 +573,6 @@ body > * { position: relative; z-index: 1; }
 
   <div class="inc-grid">
     <div class="inc-card">
-      <div class="inc-icon">🌐</div>
-      <div class="inc-text">
-        <h4>Website Improvements <span class="inc-badge">included</span></h4>
-        <p>We audit your website and make it work harder for you — speed, structure, content, and AI-readiness. No separate bill.</p>
-      </div>
-    </div>
-    <div class="inc-card">
       <div class="inc-icon">🏆</div>
       <div class="inc-text">
         <h4>Competitor Intelligence <span class="inc-badge">included</span></h4>
@@ -591,10 +587,24 @@ body > * { position: relative; z-index: 1; }
       </div>
     </div>
     <div class="inc-card">
+      <div class="inc-icon">🌐</div>
+      <div class="inc-text">
+        <h4>Website Optimization <span class="inc-badge">included</span></h4>
+        <p>We audit your website and make it work harder for you — speed, structure, content, and AI-readiness. No separate bill.</p>
+      </div>
+    </div>
+    <div class="inc-card">
+      <div class="inc-icon">🖥️</div>
+      <div class="inc-text">
+        <h4>Website Design & Hosting Services <span class="inc-badge">included</span></h4>
+        <p>World-class website design without the $10K agency bill. Custom, dynamic, fully hosted with email. Replaces GoDaddy and Squarespace.</p>
+      </div>
+    </div>
+    <div class="inc-card inc-solo">
       <div class="inc-icon">📣</div>
       <div class="inc-text">
         <h4>Ad Campaign Support <span class="inc-badge coming">coming soon</span></h4>
-        <p>When you’re ready to boost with paid ads — Facebook, TikTok, Google — we’ll manage it for you. No extra charge.</p>
+        <p>When you're ready to boost with paid ads — Facebook, TikTok, Google — we'll manage it for you. No extra charge.</p>
       </div>
     </div>
   </div>
