@@ -1,10 +1,8 @@
-/* WatchLocal.ai — WebGL background with cursor-following texture displacement
-   v2: SHARP carbon-fiber lines (matching original CSS repeating-linear-gradient
-   spec: 1px bright line every 7px + 1px dark at offset 3px on each diagonal)
-   + 2-octave fractal noise grain (matching SVG fractalNoise look).
-   Less glossy, more "flat carbon fiber" feel.
-
-   Mobile (<768px viewport or mobile UA) skipped, CSS texture fallback. */
+/* WatchLocal.ai — WebGL background with cursor tile-fracture (cyan reveal)
+   v3: Replaces blurry UV displacement with SHARP tile fracture.
+   18px tiles around cursor "open up" exposing cyan glow underneath
+   (like cracking through crust to reveal magma layer), then close back.
+   Each tile has random per-cell offset so they crack unevenly. */
 (function () {
   function isMobile() {
     if (window.innerWidth < 768) return true;
@@ -21,7 +19,6 @@
   var gl = canvas.getContext('webgl2', { antialias: false, depth: false, stencil: false, premultipliedAlpha: false }) ||
            canvas.getContext('webgl', { antialias: false, depth: false, stencil: false, premultipliedAlpha: false });
   if (!gl) { canvas.remove(); return; }
-
   document.body.classList.add('gl-bg-active');
 
   var VERT = [
@@ -35,7 +32,7 @@
     'uniform vec2 uMouse;',
     'uniform float uTime;',
     'uniform float uActivity;',
-    'uniform float uPxScale;  // canvas pixels per CSS pixel (DPR)',
+    'uniform float uPxScale;',
     '',
     'float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }',
     'float noise(vec2 p) {',
@@ -44,7 +41,6 @@
     '  return mix(mix(hash(i), hash(i + vec2(1.0,0.0)), u.x),',
     '             mix(hash(i + vec2(0.0,1.0)), hash(i + vec2(1.0,1.0)), u.x), u.y);',
     '}',
-    '// 2-octave fractal noise — matches SVG fractalNoise feel',
     'float fbm(vec2 p) {',
     '  float v = 0.0; float a = 0.6;',
     '  v += noise(p) * a; p *= 2.1; a *= 0.55;',
@@ -56,22 +52,12 @@
     '  vec2 px = gl_FragCoord.xy;',
     '  vec2 res = uResolution;',
     '  vec2 uv = px / res;',
+    '  vec2 cssPx = px / uPxScale;',
     '',
-    '  // === CURSOR DISPLACEMENT ===',
-    '  vec2 md = px - uMouse;',
-    '  float dist = length(md);',
-    '  float radius = 240.0 * uPxScale;',
-    '  float falloff = smoothstep(radius, 0.0, dist);',
-    '  float strength = falloff * uActivity * 32.0 * uPxScale;',
-    '  float ang = noise(px * 0.018 + uTime * 0.7) * 6.2832;',
-    '  vec2 disp = vec2(cos(ang), sin(ang)) * strength;',
-    '  vec2 dispPx = px + disp;',
-    '  vec2 dispCss = dispPx / uPxScale;  // back to CSS pixel coords',
-    '',
-    '  // === BASE COLOR ===',
+    '  // === TEXTURE COMPUTATION (no UV displacement now) ===',
     '  vec3 col = vec3(0.039, 0.055, 0.078);  // #0a0e14',
     '',
-    '  // === HALOS (UV, undisplaced) ===',
+    '  // Halos',
     '  vec2 halo1 = vec2(0.10, 0.95);',
     '  float h1 = exp(-length((uv - halo1) * vec2(1.8, 1.5)) * 1.3);',
     '  col += vec3(0.0, 0.9, 1.0) * h1 * 0.09;',
@@ -79,22 +65,50 @@
     '  float h2 = exp(-length((uv - halo2) * vec2(1.8, 1.5)) * 1.3);',
     '  col += vec3(1.0, 0.48, 0.0) * h2 * 0.20;',
     '',
-    '  // === CARBON FIBER (sharp, matches CSS repeating-linear-gradient spec) ===',
-    '  // +45deg diagonal: 1px bright @0px + 1px dark @3px, period 7px',
-    '  float p45 = mod(dot(dispCss, vec2(0.7071, 0.7071)), 7.0);',
-    '  col += step(p45, 1.0) * vec3(0.026);                                    // 1px white-ish line',
-    '  col -= step(3.0, p45) * (1.0 - step(4.0, p45)) * vec3(0.22);            // 1px dark line',
-    '  // -45deg diagonal: same pattern',
-    '  float pm45 = mod(dot(dispCss, vec2(0.7071, -0.7071)), 7.0);',
+    '  // Carbon fiber sharp lines',
+    '  float p45 = mod(dot(cssPx, vec2(0.7071, 0.7071)), 7.0);',
+    '  col += step(p45, 1.0) * vec3(0.026);',
+    '  col -= step(3.0, p45) * (1.0 - step(4.0, p45)) * vec3(0.22);',
+    '  float pm45 = mod(dot(cssPx, vec2(0.7071, -0.7071)), 7.0);',
     '  col += step(pm45, 1.0) * vec3(0.022);',
     '  col -= step(3.0, pm45) * (1.0 - step(4.0, pm45)) * vec3(0.20);',
-    '  // 115deg cross-stripe: 2px bright every 14px',
-    '  float p115 = mod(dot(dispCss, vec2(-0.4226, 0.9063)), 14.0);',
+    '  float p115 = mod(dot(cssPx, vec2(-0.4226, 0.9063)), 14.0);',
     '  col += step(p115, 2.0) * vec3(0.010);',
     '',
-    '  // === LEATHER GRAIN (sharp 2-octave fractal noise) ===',
-    '  float grain = fbm(dispCss * 0.85) * 0.05 - 0.025;',
+    '  // Leather grain',
+    '  float grain = fbm(cssPx * 0.85) * 0.05 - 0.025;',
     '  col += vec3(grain);',
+    '',
+    '  // === TILE FRACTURE (cyan reveal underneath) ===',
+    '  float CELL = 18.0;  // 18 CSS-px tiles',
+    '  vec2 cellId = floor(cssPx / CELL);',
+    '  vec2 cellCenter = (cellId + 0.5) * CELL;',
+    '  vec2 cursorCss = uMouse / uPxScale;',
+    '  float cellDistC = length(cellCenter - cursorCss);',
+    '  float fracRadius = 130.0;  // smaller than before (was 240)',
+    '  float fracBase = smoothstep(fracRadius, 0.0, cellDistC) * uActivity;',
+    '  float cellRand = hash(cellId);',
+    '  // openAmt 0..1 — how far this tile has cracked open. Each tile has a per-cell',
+    '  // random offset so they crack unevenly (some break first, others later).',
+    '  float openAmt = clamp(fracBase * 1.4 - cellRand * 0.5, 0.0, 1.0);',
+    '',
+    '  // Distance from this pixel to the tile center (L-inf for square tiles)',
+    '  vec2 cellLocal = abs(cssPx - cellCenter);',
+    '  float cellMaxDim = max(cellLocal.x, cellLocal.y);',
+    '  // Tile extent shrinks as it opens up (so cracks widen between tiles)',
+    '  float tileExtent = (CELL * 0.5 - 0.5) * (1.0 - openAmt * 0.85);',
+    '  float insideTile = step(cellMaxDim, tileExtent);',
+    '',
+    '  // The "layer beneath" the texture = bright cyan glow',
+    '  vec3 underColor = vec3(0.05, 0.85, 1.0) * 0.55;',
+    '',
+    '  // Replace texture with cyan glow OUTSIDE the (shrunken) tile',
+    '  col = mix(underColor, col, insideTile);',
+    '',
+    '  // Bright cyan edge glow at the crack boundary itself',
+    '  float edgeBand = smoothstep(tileExtent, tileExtent + 1.2, cellMaxDim) -',
+    '                   smoothstep(tileExtent + 2.5, tileExtent + 3.5, cellMaxDim);',
+    '  col += vec3(0.2, 1.0, 1.0) * edgeBand * openAmt * 1.0;',
     '',
     '  gl_FragColor = vec4(col, 1.0);',
     '}'
