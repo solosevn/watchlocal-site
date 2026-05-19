@@ -714,7 +714,7 @@ body.gl-bg-active::before, body.gl-bg-active::after { display: none !important; 
   <div class="footer-copy">&copy; 2026 WatchLocal.ai. All rights reserved.</div>
 </footer>
 
-<script src="js/saber-trail.js?v=13" defer></script>
+<script src="js/saber-trail.js?v=14" defer></script>
 <script src="js/glitch-bg.js?v=13" defer></script>
 <script>
 (function() {
@@ -736,14 +736,18 @@ body.gl-bg-active::before, body.gl-bg-active::after { display: none !important; 
     o2.start(now); o2.stop(now + 0.1);
   }
   function setupCards() {
-    var cards = document.querySelectorAll('.bf-card[data-fullterm]');
-    cards.forEach(function(card) {
+    // Battlefield cards: tooltip + tick
+    document.querySelectorAll('.bf-card[data-fullterm]').forEach(function(card) {
       var tip = document.createElement('div');
       tip.className = 'bf-tooltip';
       tip.textContent = card.getAttribute('data-fullterm');
       card.appendChild(tip);
       card.addEventListener('mouseenter', function() { tip.classList.add('visible'); playTick(); });
       card.addEventListener('mouseleave', function() { tip.classList.remove('visible'); });
+    });
+    // How It Works (3) + Everything Included (5) cards: tick only
+    document.querySelectorAll('.how-card, .inc-card').forEach(function(card) {
+      card.addEventListener('mouseenter', function() { playTick(); });
     });
   }
   if (document.readyState === 'loading') {
